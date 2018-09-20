@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="/node_modules/moment/moment.js"></script>
+    <script src="/node_modules/tuna-jstemplate/dist/tuna-jstemplate.js"></script>
+
+    <link rel="stylesheet" href="./dist/tuna-jsdatepicker.css">
+    <script src="/dist/tuna-jsdatepicker.js"></script>
+    <title>Document</title>
+    <script>
+        const options = {
+            date: moment()
+        };
+
+        function render() {
+
+            var template = JSDatepicker.templates.head;
+            var result = JSTemplate.parse(template.content, {
+                config: template.config,
+                options: options
+            });
+
+            template = JSDatepicker.templates.days;
+            result += JSTemplate.parse(template.content, {
+                config: template.config,
+                options: options
+            });
+
+            template = JSDatepicker.templates.weeks;
+            result += JSTemplate.parse(template.content, {
+                config: template.config,
+                options: options
+            });
+
+            template = JSDatepicker.templates.months;
+            result += JSTemplate.parse(template.content, {
+                config: template.config,
+                options: options
+            });
+
+            template = JSDatepicker.templates.years;
+            result += JSTemplate.parse(template.content, {
+                config: template.config,
+                options: options
+            });
+
+            template = JSDatepicker.templates.decades;
+            result += JSTemplate.parse(template.content, {
+                config: template.config,
+                options: options
+            });
+
+            template = JSDatepicker.templates.time;
+            result += JSTemplate.parse(template.content, {
+                config: template.config,
+                options: options
+            });
+
+
+            document.getElementById("popup").innerHTML = result;
+
+            var items = document.getElementsByClassName("t-item");
+            for (var f in document.getElementsByClassName("t-item")) {
+                items[f].onclick = function () {
+                    options.date.add(1, "M");
+                    render();
+                };
+            }
+        }
+    </script>
+</head>
+
+<body onload="render()">
+    <div id="popup" class="t-jsdatepicker"></div>
+</body>
+
+</html>

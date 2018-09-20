@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "declaration": true,
+    "outFile": "./dist/tuna-jsdatepicker.js",
+    "strict": true,
+    "module": "none",
+    "moduleResolution": "node"
+  },
+  "files": [
+    "./src/exports/moment.d.ts",
+    "./node_modules/tuna-jstemplate/dist/tuna-jstemplate.d.ts"
+  ],
+  "include": [
+    "./src"
+  ],
+  "exclude": [
+    "./dist",
+    "./node_modules"
+  ]
+}
