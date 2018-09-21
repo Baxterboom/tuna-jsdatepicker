@@ -2,29 +2,52 @@ module JSDatepicker.templates {
     export const decades: ITemplate = {
         config: {
             name: "decades",
-            step: { unit: "Y", count: 100 },
-            headerFormat: "YYYY YYYY"
+            step: { unit: "y", count: 100 },
+            headerFormat: "YYYY"
         },
-        content: `
-        <div class="t-decades">
-        <% 
-            var step = 100/2 + 9;    
-            var date = options.date;
+        template: `
+            <div class="t-decades">
+            <% 
+                var amount = template.config.step.count / 2;
 
-            var range = { 
-                start: moment(date).add(-step, "Y"),
-                end: moment(date).add(step, "Y")
+                var t = { 
+                    end: moment(date).add(amount, "Y"),
+                    start: moment(date).add(-(amount), "Y"),
+                    next: null,
+                    current: null,
+                    today: moment()
+                };
+
+                t.current = moment(t.start);
+
+                while(t.current < t.end) {
+                    var item = {
+                        value: t.current.year(),
+                        classes: ["t-item", "t-year"]
+                    };
+
+                    t.next = moment(t.current).add(11, "y");
+                    if(t.today.isBetween(t.current, t.next, "Y", "[]")) item.classes.push("t-today");
+                    
+                    w('<div class="'+ item.classes.join(" ")+ '">'+ item.value +' - '+ t.next.year() + '</div>');
+                    t.current = t.next;
+                }
+            %>
+            </div>`,
+        onMounted: function (instance: DatePicker, element: JQuery) {
+            const step = this.config.step;
+            const picker = instance.picker;
+            if (!step || !picker) return;
+
+            const date = instance.date;
+            const format = this.config.headerFormat;
+            const amount = step.count / 2;
+            const range = {
+                start: moment(date).add(-(amount), step.unit).format(format),
+                end: moment(date).add(amount, step.unit).format(format)
             };
 
-            var current = moment(range.start);
-            while(current < range.end) {
-                var next = moment(current).add(10, "y");
-                var today = date.isBetween(current, next, "Y") ? "t-today" : "";
-                var classes = ["t-item", today];
-                w('<div class="'+ classes.join(" ")+ '">'+ current.year() +' - '+ next.year() + '</div>');
-                current = next;
-            }
-        %>
-        </div>`
+            picker.find(".t-action").text(`${range.start} - ${range.end}`);
+        }
     }
 }

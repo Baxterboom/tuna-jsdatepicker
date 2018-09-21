@@ -3,20 +3,20 @@ module JSDatepicker.templates {
         config: {
             name: "picker"
         },
-        content: `
-            <div class="t-jsdatepicker t-picker">
-                <%
-                    var t = JSDatepicker.templates;
+        template: `<div class="t-jsdatepicker t-picker"></div>`,
+        onMounted: (instance: DatePicker, element: JQuery) => {
+            if (instance.picker) instance.picker.remove();
 
-                    var template = {
-                        head: t.head,
-                        view: t[options.view || "days"]
-                    };
+            instance.picker = element;
+            const t: any = templates;
+            const view = instance.view as string;
+            const template = t[view];
 
-                    w(t.parse(template.head, this));
-                    w(t.parse(template.view, this));
-                %>
-            </div>
-            `
+            const head = $.extend({}, templates.head);
+            $.extend(head.config, template.config, head.config);
+
+            templates.mount(head, instance, element);
+            templates.mount(template, instance, element);
+        }
     }
 }

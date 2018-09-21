@@ -5,16 +5,24 @@ module JSDatepicker.templates {
             step: { unit: "y", count: 1 },
             headerFormat: "YYYY"
         },
-        content: `
+        template: `
             <div class="t-months">
             <% 
-                var date = options.date;
-                var current = moment().startOf("year");
-                moment.monthsShort().forEach(function(month) {
-                    var today = current.isSame(date, "M") ? "t-today" : "";
-                    var classes = ["t-item", today];
-                    w('<div class="'+ classes.join(" ") +'">'+ month +'</div>');
-                    current.add(1, "M");
+                var t = {
+                    today: moment(),
+                    current: moment(date).startOf("year")
+                };
+                
+                moment.monthsShort().forEach(function(m) {
+                    var item = {
+                        value: m,
+                        classes: ["t-item", "t-month"]
+                    };
+
+                    if(t.current.isSame(t.today, "M")) item.classes.push("t-today");
+
+                    w('<div class="'+ item.classes.join(" ") +'">'+ item.value +'</div>');
+                    t.current.add(1, "M");
                 });
             %>
             </div>`

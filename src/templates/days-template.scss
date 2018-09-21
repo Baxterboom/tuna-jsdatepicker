@@ -1,0 +1,14 @@
+.t-days {
+    .t-head {
+        flex-direction: row;
+    }
+
+    .t-body {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .t-item {
+        padding: 10px;
+    }
+}

@@ -3,8 +3,6 @@ module JSDatepicker.templates {
         config: {
             name: "main"
         },
-        content: `
-            <div class="t-jsdatepicker"></div>
-            `
+        template: `<div class="t-jsdatepicker"></div>`
     }
 }

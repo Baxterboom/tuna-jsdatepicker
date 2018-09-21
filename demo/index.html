@@ -13,70 +13,67 @@
     <script src="/dist/tuna-jsdatepicker.js"></script>
     <title>Document</title>
     <script>
-        const options = {
-            date: moment()
-        };
+
+        function onload() {
+            JSDatepicker.create("#datepicker", { date: moment() });
+            //render();
+        }
 
         function render() {
-
-
-
-            var template = JSDatepicker.templates.head;
-            var result = JSDatepicker.templates.parse(template, {
-                options: options,
-                template: template
+            const parent = $("#templates");
+            const datepicker = new JSDatepicker.create(parent, {
+                date: moment()
             });
 
-            template = JSDatepicker.templates.days;
-            result += JSDatepicker.templates.parse(template, {
-                options: options,
-                template: template
-            });
+            parent.html();
 
-            template = JSDatepicker.templates.weeks;
-            result += JSDatepicker.templates.parse(template, {
-                options: options,
-                template: template
-            });
+            const templates = JSDatepicker.templates;
 
-            template = JSDatepicker.templates.months;
-            result += JSDatepicker.templates.parse(template, {
-                options: options,
-                template: template
-            });
+            templates.mount(templates.head, datepicker, parent);
+            templates.mount(templates.days, datepicker, parent);
+            templates.mount(templates.weeks, datepicker, parent);
+            templates.mount(templates.months, datepicker, parent);
+            templates.mount(templates.years, datepicker, parent);
+            templates.mount(templates.decades, datepicker, parent);
+            templates.mount(templates.time, datepicker, parent);
 
-            template = JSDatepicker.templates.years;
-            result += JSDatepicker.templates.parse(template, {
-                options: options,
-                template: template
+            parent.find(".t-item").on("click", function () {
+                datepicker.date.add(1, "M");
+                datepicker.render();
             });
-
-            template = JSDatepicker.templates.decades;
-            result += JSDatepicker.templates.parse(template, {
-                options: options,
-                template: template
-            });
-
-            template = JSDatepicker.templates.time;
-            result += JSDatepicker.templates.parse(template, {
-                options: options,
-                template: template
-            });
-
-            $("#templates1").html(result).find(".t-item").on("click", function(){
-                options.date.add(1, "M");
-                    render();
-            });
-
-            JSDatepicker.create("#datepicker", {date:moment()});
         }
     </script>
+    <style>
+        body {
+            margin-top:50px;
+            display: flex;
+            flex-direction: row;
+        }
+
+        .t-jsdatepicker .t-picker{
+            position: relative;
+        }
+        
+        jstemplate {
+            display: block;
+            width: 100%;
+            padding:20px;
+            background: red;
+            animation: blinker 1s linear infinite;
+        }
+
+        @keyframes blinker {
+            50% {
+                opacity: 0;
+            }
+        }
+
+    </style>
 </head>
 
-<body onload="render()">
-    <br><br><br><br>
+<body onload="onload()">
     <input type="text" id="datepicker">
-    <div id="templates" class="t-jsdatepicker"></div>
+    <div id="templates" class="t-jsdatepicker t-picker"></div>
 </body>
 
 </html>

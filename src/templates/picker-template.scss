@@ -1,6 +1,7 @@
 &.t-picker {
     position: absolute;
     z-index: 1;
+    max-width: 280px;
 
     &::before {
         content: none;
@@ -16,44 +17,10 @@
         display: flex;
         flex-direction: row;
         justify-content: center;
-
-        button {
-            border: 1;
-            margin: 2px;
-            background: none;
-        }
-
-        .t-action {
-            border-radius: 3px;
-            text-align: center;
-            vertical-align: middle;
-            flex-grow: 2;
-            padding: 10px;
-            width: 60%;
-        }
-
-        .t-prev::before,
-        .t-next::before {
-            content: " ";
-            display: inline-block;
-            border: solid black;
-            border-width: 0 3px 3px 0;
-            width: 10px;
-            height: 10px;
-            margin: 10px;
-        }
-
-        .t-prev::before {
-            transform: rotate(135deg);
-        }
-
-        .t-next::before {
-            transform: rotate(-45deg);
-        }
     }
 
     .t-days,
-    .t-times,
+    .t-time,
     .t-weeks,
     .t-years,
     .t-months,
@@ -77,18 +44,6 @@
         }
     }
 
-    .t-days {
-        .t-head {
-            flex-direction: row;
-        }
-
-        .t-body {
-            flex-direction: row;
-            flex-wrap: wrap;
-        }
-
-        .t-item {
-            padding: 10px;
-        }
-    }
+    @import "./templates/head-template.scss";
+    @import "./templates/days-template.scss";
 }

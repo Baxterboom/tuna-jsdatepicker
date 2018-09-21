@@ -1,23 +1,28 @@
 module JSDatepicker.templates {
     export const head: ITemplate = {
         config: {
-            name: "head",
-            step: { unit: "M", count: 1 },
-            headerFormat: "MMMMM YYYY"
+            name: "head"
         },
-        content: `
-            <% 
-                var date = options.date;
-                var title = date.format(template.config.headerFormat);
-
-                $(".t-head button").on("click", function() {    
-                    console.log(1);
-                });
-            %>
+        template: `
             <div class="t-head">
                 <button class="t-prev"></button>
-                <button class="t-action"><%=title%></button>
+                <button class="t-action"><%=date.format(template.config.headerFormat)%></button>
                 <button class="t-next"></button>
-            </div>`
+            </div>`,
+        onMounted: function (instance: DatePicker, element: JQuery) {
+
+            element.find("button.t-prev, button.t-next").on("click", (e) => {
+                const b = $(e.target);
+                instance.step(this.config, b.hasClass("t-next"));
+            });
+
+            element.find(".t-item").on("click", (e) => {
+                instance.go(navigation.back);
+            });
+
+            element.find("button.t-action").on("click", (e) => {
+                instance.go(navigation.forward);
+            });
+        }
     }
 }

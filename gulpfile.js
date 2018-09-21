@@ -2,7 +2,7 @@ const gulp = require("gulp");
 const sass = require("gulp-sass");
 const rename = require("gulp-rename");
 
-const bs = require("browser-sync").create();
+const b = require("browser-sync").create();
 
 const typescript = require('gulp-typescript');
 const tsc = typescript.createProject('tsconfig.json');
@@ -39,16 +39,16 @@ gulp.task("sass", function () {
     .pipe(gulp.dest("./dist"));
 });
 
-gulp.task("watch", ["ts", "sass", "bs"], function () {
+gulp.task("watch", ["ts", "sass", "browsersync"], function () {
   gulp.watch("./src/**/*.ts", ["ts"]);
   gulp.watch("./src/**/*.scss", ["sass"]);
 
-  gulp.watch("./dist/**/*.*").on('change', bs.reload);
-  gulp.watch("./demo/**/*.html").on('change', bs.reload);
+  gulp.watch("./dist/**/*.*").on('change', b.reload);
+  gulp.watch("./demo/**/*.html").on('change', b.reload);
 });
 
-gulp.task("bs", function () {
-  bs.init({
+gulp.task("browsersync", function () {
+  b.init({
     server: {
       baseDir: ["./demo"],
       routes: {

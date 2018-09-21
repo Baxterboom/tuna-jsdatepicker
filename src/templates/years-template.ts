@@ -2,28 +2,50 @@ module JSDatepicker.templates {
     export const years: ITemplate = {
         config: {
             name: "years",
-            step: { unit: "y", count: 10 },
-            headerFormat: "YYYY - YYYY"
+            step: { unit: "y", count: 12 },
+            headerFormat: "YYYY"
         },
-        content: `
+        template: `
             <div class="t-years">
             <% 
-                var date = options.date;
-                var config = template.config;
-                
-                var range = {
-                    start: moment(date).add(-6, config.step.unit),
-                    end: moment(date).add(6, config.step.unit)
+                var amount = template.config.step.count / 2;
+
+                var t = {
+                    end: moment(date).add(amount, "Y"),
+                    start: moment(date).add(-(amount), "Y"),
+                    today: moment(),
+                    current: null
                 };
 
-                var current = moment(range.start);
-                while(current < range.end) {
-                    var today = current.isSame(date, "y") ? "t-today" : "";
-                    var classes = ["t-item", today];
-                    w('<div class="'+ classes.join(" ")+ '">'+ current.year() +'</div>');
-                    current.add(1, "y");
+                t.current = moment(t.start);
+
+                while(t.current < t.end) {
+                    var item = {
+                        value:  t.current.year(), 
+                        classes: ["t-item", "t-year"]
+                    };
+
+                    if(t.current.isSame(t.today, "Y")) item.classes.push("t-today");
+
+                    w('<div class="'+ item.classes.join(" ")+ '">'+ item.value +'</div>');
+                    t.current.add(1, "y");
                 }
             %>
-            </div>`
+            </div>`,
+        onMounted: function (instance: DatePicker, element: JQuery) {
+            const step = this.config.step;
+            const picker = instance.picker;
+            if (!step || !picker) return;
+
+            const date = instance.date;
+            const format = this.config.headerFormat;
+            const amount = step.count / 2;
+            const range = {
+                end: moment(date).add(amount - 1, step.unit).format(format),
+                start: moment(date).add(-(amount), step.unit).format(format)
+            };
+
+            picker.find(".t-action").text(`${range.start} - ${range.end}`);
+        }
     }
 }
