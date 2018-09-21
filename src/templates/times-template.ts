@@ -18,7 +18,7 @@ module JSDatepicker.templates {
                 var current = moment(range.start);
                 while(current <= range.end) {
                     var next = moment(current).add(15, "m");
-                    var today = date.isBetween(current, next, "HH:mm") ? "today" : "";
+                    var today = date.isBetween(current, next, "HH:mm") ? "t-today" : "";
                     var classes = ["t-item", today];
                     w('<div class="'+ classes.join(" ")+ '">'+ current.format("HH:mm") +'</div>');
                     current = next;

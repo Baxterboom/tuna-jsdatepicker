@@ -9,6 +9,7 @@
   },
   "files": [
     "./src/exports/moment.d.ts",
+    "./node_modules/@types/jquery/jquery.d.ts",
     "./node_modules/tuna-jstemplate/dist/tuna-jstemplate.d.ts"
   ],
   "include": [

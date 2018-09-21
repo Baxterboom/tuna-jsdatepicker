@@ -11,7 +11,7 @@ module JSDatepicker.templates {
                 var date = options.date;
                 var current = moment().startOf("year");
                 moment.monthsShort().forEach(function(month) {
-                    var today = current.isSame(date, "M") ? "today" : "";
+                    var today = current.isSame(date, "M") ? "t-today" : "";
                     var classes = ["t-item", today];
                     w('<div class="'+ classes.join(" ") +'">'+ month +'</div>');
                     current.add(1, "M");

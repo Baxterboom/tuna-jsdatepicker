@@ -8,10 +8,15 @@ module JSDatepicker.templates {
         content: `
             <% 
                 var date = options.date;
+                var title = date.format(template.config.headerFormat);
+
+                $(".t-head button").on("click", function() {    
+                    console.log(1);
+                });
             %>
             <div class="t-head">
                 <button class="t-prev"></button>
-                <div class="t-title"><%=date.format(config.headerFormat)%></div>
+                <button class="t-action"><%=title%></button>
                 <button class="t-next"></button>
             </div>`
     }

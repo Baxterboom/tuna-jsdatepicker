@@ -1,65 +1,22 @@
 .t-jsdatepicker {
+    @import "./templates/picker-template.scss";
+
+    position: relative;
     background: silver;
     border: 1px solid gray;
 
-    .today {
-        background: green;
+    &::before {
+        content: "";
+        position: absolute;
+        right: 0;
+        display: block;
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        background: red;
     }
 
-    .t-head,
-    .t-body {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-
-        .t-title {
-            text-align: center;
-            vertical-align: middle;
-            flex-grow: 2;
-            padding: 10px;
-            width: 60%;
-        }
-
-        button {
-            flex-grow: 1;
-        }
-    }
-
-    .t-times,
-    .t-days,
-    .t-weeks,
-    .t-years,
-    .t-months,
-    .t-decades,
-        {
-        display: flex;
-        flex-wrap: wrap;
-        flex-direction: row;
-        justify-content: center;
-        border: 1px solid white;
-
-        .t-item {
-            padding: 20px;
-
-            &:hover {
-                background: blue;
-                border-radius: 5px;
-            }
-        }
-    }
-
-    .t-days {
-        .t-head {
-            flex-direction: row;
-        }
-
-        .t-body {
-            flex-direction: row;
-            flex-wrap: wrap;
-        }
-
-        .t-item {
-            padding: 10px;
-        }
+    .t-input {
+        width: 100%;
     }
 }

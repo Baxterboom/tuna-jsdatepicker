@@ -1,0 +1,94 @@
+&.t-picker {
+    position: absolute;
+    z-index: 1;
+
+    &::before {
+        content: none;
+    }
+
+    .t-today {
+        color: white;
+        background: green;
+    }
+
+    .t-head,
+    .t-body {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+
+        button {
+            border: 1;
+            margin: 2px;
+            background: none;
+        }
+
+        .t-action {
+            border-radius: 3px;
+            text-align: center;
+            vertical-align: middle;
+            flex-grow: 2;
+            padding: 10px;
+            width: 60%;
+        }
+
+        .t-prev::before,
+        .t-next::before {
+            content: " ";
+            display: inline-block;
+            border: solid black;
+            border-width: 0 3px 3px 0;
+            width: 10px;
+            height: 10px;
+            margin: 10px;
+        }
+
+        .t-prev::before {
+            transform: rotate(135deg);
+        }
+
+        .t-next::before {
+            transform: rotate(-45deg);
+        }
+    }
+
+    .t-days,
+    .t-times,
+    .t-weeks,
+    .t-years,
+    .t-months,
+    .t-decades,
+        {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        justify-content: center;
+        border: 1px solid white;
+
+        .t-item {
+            padding: 20px;
+            cursor: pointer;
+            border-radius: 3px;
+
+            &:hover {
+                color: white;
+                background: blue;
+            }
+        }
+    }
+
+    .t-days {
+        .t-head {
+            flex-direction: row;
+        }
+
+        .t-body {
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+
+        .t-item {
+            padding: 10px;
+        }
+    }
+}

@@ -9,8 +9,9 @@ module JSDatepicker.templates {
             <div class="t-days">
                 <div class="t-head">
             <%
-                var headings = ["w"].concat(moment.weekdaysMin());
-                headings.forEach(function(f){
+                w('<div class="t-item t-week">w</div>');
+
+                moment.weekdaysMin().forEach(function(f){
                     w('<div class="t-item">'+ f +'</div>');
                 });
             %>
@@ -29,11 +30,10 @@ module JSDatepicker.templates {
                 while(current < range.end) {
                     if(week != current.isoWeek())
                     {
-                        week = current.isoWeek();
-                        w('<div class="t-item">'+ week +'</div>');
-                            
+                        w('<div class="t-item t-week">'+ (week = current.isoWeek()) +'</div>');
                     }
-                    var today = current.isSame(date, "d")  ? "today" : "";
+                    
+                    var today = current.isSame(date, "d")  ? "t-today" : "";
                     var classes = ["t-item", today];
                     w('<div class="'+ classes.join(" ") +'">'+ current.date() +'</div>');
                     current.add(1, "d");

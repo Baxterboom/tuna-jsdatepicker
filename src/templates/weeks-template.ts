@@ -9,6 +9,7 @@ module JSDatepicker.templates {
             <div class="t-weeks">
             <% 
                 var date = options.date;
+                var config = template.config;
 
                 var range = {
                     start: moment(date).add(-6, config.step.unit),
@@ -17,7 +18,7 @@ module JSDatepicker.templates {
 
                 var current = moment(range.start);
                 while(current < range.end) {
-                    var today = current.isSame(date, "w") ? "today" : "";
+                    var today = current.isSame(date, "w") ? "t-today" : "";
                     var classes = ["t-item", today];
                     w('<div class="'+ classes.join(" ")+ '">'+ current.isoWeek() +'</div>');
                     current.add(1, "w");
