@@ -132,6 +132,25 @@ var JSDatepicker;
 (function (JSDatepicker) {
     var templates;
     (function (templates) {
+        templates.foot = {
+            config: {
+                name: "foot"
+            },
+            template: "\n            <div class=\"t-foot\">\n                <button class=\"t-today\">Today</button>\n            </div>",
+            onMounted: function (instance, element) {
+                element.find("button.t-today").on("click", function (e) {
+                    instance.view = instance.options.view;
+                    instance.date = moment();
+                    instance.render();
+                });
+            }
+        };
+    })(templates = JSDatepicker.templates || (JSDatepicker.templates = {}));
+})(JSDatepicker || (JSDatepicker = {}));
+var JSDatepicker;
+(function (JSDatepicker) {
+    var templates;
+    (function (templates) {
         templates.head = {
             config: {
                 name: "head"
@@ -197,8 +216,10 @@ var JSDatepicker;
                 var template = t[view];
                 var head = $.extend({}, templates.head);
                 $.extend(head.config, template.config, head.config);
+                var foot = templates.foot;
                 templates.mount(head, instance, element);
                 templates.mount(template, instance, element);
+                templates.mount(foot, instance, element);
             }
         };
     })(templates = JSDatepicker.templates || (JSDatepicker.templates = {}));

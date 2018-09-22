@@ -15,8 +15,11 @@ module JSDatepicker.templates {
             const head = $.extend({}, templates.head);
             $.extend(head.config, template.config, head.config);
 
+            const foot = templates.foot;
+
             templates.mount(head, instance, element);
             templates.mount(template, instance, element);
+            templates.mount(foot, instance, element);
         }
     }
 }
