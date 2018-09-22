@@ -42,15 +42,17 @@ module JSDatepicker {
         };
 
         constructor(target: any, public options: IOptions) {
-            this.options = $.extend(this.options, DatePicker.options, options);
+            this.options = $.extend(DatePicker.options, this.options);
             this.date = moment(this.options.date);
             this.view = this.options.view as view || "days";
 
-            this.input = $(target);
-            this.input.wrap(templates.parse(templates.main, this));
+            this.element = templates.parse(templates.main, this);
 
-            this.element = templates.mount(templates.main, this, this.input.parent());
-            this.input.addClass("t-input").appendTo(this.element);
+            this.input = $(target);
+            this.input.after(this.element);
+            this.input.addClass("t-input");
+
+            this.element.append(this.input);
             this.render();
         };
 

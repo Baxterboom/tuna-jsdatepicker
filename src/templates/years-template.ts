@@ -11,6 +11,7 @@ module JSDatepicker.templates {
                 var amount = template.config.step.count / 2;
 
                 var t = {
+                    date: options.date,
                     end: moment(date).add(amount, "Y"),
                     start: moment(date).add(-(amount), "Y"),
                     today: moment(),
@@ -25,6 +26,7 @@ module JSDatepicker.templates {
                         classes: ["t-item", "t-year"]
                     };
 
+                    if(t.current.isSame(t.date, "d")) item.classes.push("active");
                     if(t.current.isSame(t.today, "Y")) item.classes.push("t-today");
 
                     w('<div class="'+ item.classes.join(" ")+ '">'+ item.value +'</div>');
@@ -45,7 +47,7 @@ module JSDatepicker.templates {
                 start: moment(date).add(-(amount), step.unit).format(format)
             };
 
-            picker.find(".t-action").text(`${range.start} - ${range.end}`);
+            picker.find(".t-nav").text(`${range.start} - ${range.end}`);
         }
     }
 }

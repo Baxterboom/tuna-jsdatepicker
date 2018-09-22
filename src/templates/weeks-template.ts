@@ -3,14 +3,15 @@ module JSDatepicker.templates {
         config: {
             name: "weeks",
             step: { unit: "M", count: 1 },
-            headerFormat: "W MMMM YYYY"
+            headerFormat: "MMMM YYYY"
         },
         template: `
             <div class="t-weeks">
             <% 
                 var t = {
-                    end: moment(date).add(8, "w"),
-                    start: moment(date).add(-8, "w"),
+                    date: options.date,
+                    end: moment(date).add(10, "w").startOf("M"),
+                    start: moment(date).add(-11, "w").endOf("M"),
                     today: moment(),
                     current: null
                 };
@@ -23,6 +24,7 @@ module JSDatepicker.templates {
                         classes: ["t-item", "t-week"]
                     };
 
+                    if(t.current.isSame(t.date, "W")) item.classes.push("active");
                     if(t.current.isSame(t.today, "W")) item.classes.push("t-today");
 
                     w('<div class="'+ item.classes.join(" ")+ '">'+ item.value +'</div>');

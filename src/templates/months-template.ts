@@ -9,6 +9,7 @@ module JSDatepicker.templates {
             <div class="t-months">
             <% 
                 var t = {
+                    date: options.date,
                     today: moment(),
                     current: moment(date).startOf("year")
                 };
@@ -19,6 +20,7 @@ module JSDatepicker.templates {
                         classes: ["t-item", "t-month"]
                     };
 
+                    if(t.current.isSame(t.date, "M")) item.classes.push("active");
                     if(t.current.isSame(t.today, "M")) item.classes.push("t-today");
 
                     w('<div class="'+ item.classes.join(" ") +'">'+ item.value +'</div>');

@@ -1,22 +1,16 @@
 &.t-picker {
     position: absolute;
+    display: table;
+    width: 280px;
     z-index: 1;
-    max-width: 280px;
 
     &::before {
         content: none;
     }
 
-    .t-today {
-        color: white;
-        background: green;
-    }
-
     .t-head,
     .t-body {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
+        display: table-row;
     }
 
     .t-days,
@@ -24,24 +18,16 @@
     .t-weeks,
     .t-years,
     .t-months,
-    .t-decades,
-        {
+    .t-decades {
         display: flex;
         flex-wrap: wrap;
-        flex-direction: row;
         justify-content: center;
-        border: 1px solid white;
 
         .t-item {
-            margin: 10px;
             padding: 10px;
-            cursor: pointer;
+            margin: 10px;
+            text-align: center;
             border-radius: 3px;
-
-            &:hover {
-                color: white;
-                background: blue;
-            }
         }
     }
 

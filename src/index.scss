@@ -1,3 +1,32 @@
+%hover {
+    color: white;
+    background: blue;
+}
+
+%active {
+    color: white;
+    background: blue;
+    border: 1px solid white;
+}
+
+%today {
+    color: white;
+    border: 1px solid white;
+    background: darkgreen
+}
+
+%item {
+    cursor: pointer;
+
+    &.active {
+        @extend %active;
+    }
+
+    &:hover {
+        @extend %hover;
+    }
+}
+
 .t-jsdatepicker {
     @import "./templates/picker-template.scss";
     position: relative;
@@ -13,6 +42,18 @@
         height: 20px;
         position: absolute;
         background: red;
+    }
+
+    .t-hidden {
+        display: none !important;
+    }
+
+    .t-today {
+        @extend %today;
+    }
+
+    .active {
+        @extend %active;
     }
 
     .t-input {

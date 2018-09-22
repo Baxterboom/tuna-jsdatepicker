@@ -6,8 +6,17 @@ module JSDatepicker.templates {
         template: `
             <div class="t-head">
                 <button class="t-prev"></button>
-                <button class="t-action"><%=date.format(template.config.headerFormat)%></button>
+                <button class="t-nav"><%=date.format(template.config.headerFormat)%></button>
                 <button class="t-next"></button>
+            </div>
+            <div class="t-head t-hidden">
+            <%
+                options.views.forEach(function(item) {
+                    var classes = ["t-nav"];
+                    if(view == item) return;
+                    w('<button class="+ classes.join(" ") +">'+ item + '</button>');
+                });  
+            %>
             </div>`,
         onMounted: function (instance: DatePicker, element: JQuery) {
 
@@ -20,7 +29,7 @@ module JSDatepicker.templates {
                 instance.go(navigation.back);
             });
 
-            element.find("button.t-action").on("click", (e) => {
+            element.find("button.t-nav").on("click", (e) => {
                 instance.go(navigation.forward);
             });
         }

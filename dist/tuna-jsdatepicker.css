@@ -1,21 +1,34 @@
+.t-jsdatepicker.t-picker .t-days .t-body .t-item:hover, .t-jsdatepicker.t-picker .t-weeks .t-item:hover {
+  color: white;
+  background: blue; }
+
+.t-jsdatepicker.t-picker .t-days .t-body .active.t-item, .t-jsdatepicker.t-picker .t-weeks .active.t-item, .t-jsdatepicker .active {
+  color: white;
+  background: blue;
+  border: 1px solid white; }
+
+.t-jsdatepicker .t-today {
+  color: white;
+  border: 1px solid white;
+  background: darkgreen; }
+
+.t-jsdatepicker.t-picker .t-days .t-body .t-item, .t-jsdatepicker.t-picker .t-weeks .t-item {
+  cursor: pointer; }
+
 .t-jsdatepicker {
   position: relative;
   background: silver;
   border: 1px solid gray; }
   .t-jsdatepicker.t-picker {
     position: absolute;
-    z-index: 1;
-    max-width: 280px; }
+    display: table;
+    width: 280px;
+    z-index: 1; }
     .t-jsdatepicker.t-picker::before {
       content: none; }
-    .t-jsdatepicker.t-picker .t-today {
-      color: white;
-      background: green; }
     .t-jsdatepicker.t-picker .t-head,
     .t-jsdatepicker.t-picker .t-body {
-      display: flex;
-      flex-direction: row;
-      justify-content: center; }
+      display: table-row; }
     .t-jsdatepicker.t-picker .t-days,
     .t-jsdatepicker.t-picker .t-time,
     .t-jsdatepicker.t-picker .t-weeks,
@@ -24,58 +37,55 @@
     .t-jsdatepicker.t-picker .t-decades {
       display: flex;
       flex-wrap: wrap;
-      flex-direction: row;
-      justify-content: center;
-      border: 1px solid white; }
+      justify-content: center; }
       .t-jsdatepicker.t-picker .t-days .t-item,
       .t-jsdatepicker.t-picker .t-time .t-item,
       .t-jsdatepicker.t-picker .t-weeks .t-item,
       .t-jsdatepicker.t-picker .t-years .t-item,
       .t-jsdatepicker.t-picker .t-months .t-item,
       .t-jsdatepicker.t-picker .t-decades .t-item {
-        margin: 10px;
         padding: 10px;
-        cursor: pointer;
+        margin: 10px;
+        text-align: center;
         border-radius: 3px; }
-        .t-jsdatepicker.t-picker .t-days .t-item:hover,
-        .t-jsdatepicker.t-picker .t-time .t-item:hover,
-        .t-jsdatepicker.t-picker .t-weeks .t-item:hover,
-        .t-jsdatepicker.t-picker .t-years .t-item:hover,
-        .t-jsdatepicker.t-picker .t-months .t-item:hover,
-        .t-jsdatepicker.t-picker .t-decades .t-item:hover {
-          color: white;
-          background: blue; }
-    .t-jsdatepicker.t-picker .t-head button {
-      margin: 2px;
-      cursor: pointer;
-      background: none; }
-    .t-jsdatepicker.t-picker .t-head .t-action {
-      border-radius: 3px;
-      text-align: center;
-      vertical-align: middle;
-      flex-grow: 2;
-      padding: 10px;
-      width: 60%; }
-    .t-jsdatepicker.t-picker .t-head .t-prev::before,
-    .t-jsdatepicker.t-picker .t-head .t-next::before {
-      content: " ";
-      display: inline-block;
-      border: solid black;
-      border-width: 0 3px 3px 0;
-      width: 10px;
-      height: 10px;
-      margin: 10px; }
-    .t-jsdatepicker.t-picker .t-head .t-prev::before {
-      transform: rotate(135deg); }
-    .t-jsdatepicker.t-picker .t-head .t-next::before {
-      transform: rotate(-45deg); }
-    .t-jsdatepicker.t-picker .t-days .t-head {
-      flex-direction: row; }
-    .t-jsdatepicker.t-picker .t-days .t-body {
+    .t-jsdatepicker.t-picker .t-head {
+      display: flex;
       flex-direction: row;
-      flex-wrap: wrap; }
-    .t-jsdatepicker.t-picker .t-days .t-item {
-      padding: 10px; }
+      justify-content: center; }
+      .t-jsdatepicker.t-picker .t-head button {
+        border: 0;
+        margin: 2px;
+        cursor: pointer;
+        background: none; }
+      .t-jsdatepicker.t-picker .t-head .t-nav {
+        border-radius: 3px;
+        text-align: center;
+        vertical-align: middle;
+        flex-grow: 2; }
+      .t-jsdatepicker.t-picker .t-head .t-prev::before,
+      .t-jsdatepicker.t-picker .t-head .t-next::before {
+        content: " ";
+        display: inline-block;
+        border: solid black;
+        border-width: 0 3px 3px 0;
+        width: 10px;
+        height: 10px;
+        margin: 10px; }
+      .t-jsdatepicker.t-picker .t-head .t-prev::before {
+        transform: rotate(135deg); }
+      .t-jsdatepicker.t-picker .t-head .t-next::before {
+        transform: rotate(-45deg); }
+    .t-jsdatepicker.t-picker .t-days {
+      flex-direction: column; }
+      .t-jsdatepicker.t-picker .t-days .t-head {
+        display: table-row; }
+      .t-jsdatepicker.t-picker .t-days .t-body {
+        display: table-row; }
+      .t-jsdatepicker.t-picker .t-days .t-week {
+        display: table-row; }
+      .t-jsdatepicker.t-picker .t-days .t-item {
+        display: table-cell;
+        width: 12%; }
     .t-jsdatepicker.t-picker .t-foot {
       padding: 10px;
       text-align: center; }
@@ -88,5 +98,7 @@
     height: 20px;
     position: absolute;
     background: red; }
+  .t-jsdatepicker .t-hidden {
+    display: none !important; }
   .t-jsdatepicker .t-input {
     width: 100%; }

@@ -1,29 +1,35 @@
 .t-head {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
 
     button {
+        border: 0;
         margin: 2px;
         cursor: pointer;
         background: none;
     }
 
-    .t-action {
+    .t-nav {
         border-radius: 3px;
         text-align: center;
         vertical-align: middle;
         flex-grow: 2;
-        padding: 10px;
-        width: 60%;
     }
 
-    .t-prev::before,
-    .t-next::before {
-        content: " ";
-        display: inline-block;
-        border: solid black;
-        border-width: 0 3px 3px 0;
-        width: 10px;
-        height: 10px;
-        margin: 10px;
+    .t-prev,
+    .t-next {
+
+        &::before {
+            content: " ";
+            display: inline-block;
+            border: solid black;
+            border-width: 0 3px 3px 0;
+            width: 10px;
+            height: 10px;
+            margin: 10px;
+        }
     }
 
     .t-prev::before {

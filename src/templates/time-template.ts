@@ -9,6 +9,7 @@ module JSDatepicker.templates {
             <div class="t-time">
             <% 
                 var t = {
+                    date: options.date,
                     end: moment(date).endOf("d"),
                     start: moment(date).startOf("d"),
                     today: moment(),
@@ -24,6 +25,7 @@ module JSDatepicker.templates {
                         classes: ["t-item", "t-hours"]
                     };
 
+                    if(t.date.isBetween(t.current, item.next, "HH:mm", "[]")) item.classes.push("active");
                     if(t.today.isBetween(t.current, item.next, "HH:mm", "[]")) item.classes.push("t-today");
                   
                     w('<div class="'+ item.classes.join(" ")+ '">'+ item.value +'</div>');
