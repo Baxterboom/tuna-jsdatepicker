@@ -51,6 +51,20 @@ module JSDatepicker.templates {
             };
 
             picker.find(".t-nav.t-title").text(`${range.start} - ${range.end}`);
+
+
+            const items = element.find(".t-item");
+            items.on("click", (e) => {
+                let value = 0;
+
+                const target = $(e.target);
+                target.text().split(" - ").forEach(item => {
+                    value += parseInt(item);
+                });
+
+                instance.date.year(value / 2);
+                instance.render();
+            });
         }
     }
 }

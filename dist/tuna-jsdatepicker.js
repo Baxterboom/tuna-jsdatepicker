@@ -134,6 +134,16 @@ var JSDatepicker;
                     end: moment(date).add(amount, step.unit).format(format)
                 };
                 picker.find(".t-nav.t-title").text(range.start + " - " + range.end);
+                var items = element.find(".t-item");
+                items.on("click", function (e) {
+                    var value = 0;
+                    var target = $(e.target);
+                    target.text().split(" - ").forEach(function (item) {
+                        value += parseInt(item);
+                    });
+                    instance.date.year(value / 2);
+                    instance.render();
+                });
             }
         };
     })(templates = JSDatepicker.templates || (JSDatepicker.templates = {}));
