@@ -133,7 +133,7 @@ var JSDatepicker;
                     start: moment(date).add(-(amount), step.unit).format(format),
                     end: moment(date).add(amount, step.unit).format(format)
                 };
-                picker.find(".t-nav").text(range.start + " - " + range.end);
+                picker.find(".t-nav.t-title").text(range.start + " - " + range.end);
             }
         };
     })(templates = JSDatepicker.templates || (JSDatepicker.templates = {}));
@@ -165,18 +165,19 @@ var JSDatepicker;
             config: {
                 name: "head"
             },
-            template: "\n            <div class=\"t-head\">\n                <button class=\"t-prev\"></button>\n                <button class=\"t-nav\"><%=date.format(template.config.headerFormat)%></button>\n                <button class=\"t-next\"></button>\n            </div>\n            <div class=\"t-head t-hidden\">\n            <%\n                options.views.forEach(function(item) {\n                    var classes = [\"t-nav\"];\n                    if(view == item) return;\n                    w('<button class=\"+ classes.join(\" \") +\">'+ item + '</button>');\n                });  \n            %>\n            </div>",
+            template: "\n            <div class=\"t-head\">\n                <button class=\"t-nav t-prev\"></button>\n                <button class=\"t-nav t-title\"><%=date.format(template.config.headerFormat)%></button>\n                <button class=\"t-nav t-next\"></button>\n            </div>\n            <div class=\"t-head t-hidden1\">\n            <%\n                options.views.forEach(function(item) {\n                    var classes = [\"t-nav\"];\n                    if(view == item) return;\n                    w('<button class=\"t-nav t-view\">'+ item + '</button>');\n                });  \n            %>\n            </div>",
             onMounted: function (instance, element) {
                 var _this = this;
+                element.find("button.t-title").on("click", function (e) {
+                    instance.go(JSDatepicker.navigation.forward);
+                });
                 element.find("button.t-prev, button.t-next").on("click", function (e) {
                     var b = $(e.target);
                     instance.step(_this.config, b.hasClass("t-next"));
                 });
-                element.find(".t-item").on("click", function (e) {
-                    instance.go(JSDatepicker.navigation.back);
-                });
-                element.find("button.t-nav").on("click", function (e) {
-                    instance.go(JSDatepicker.navigation.forward);
+                element.find("button.t-view").on("click", function (e) {
+                    instance.view = $(e.target).text();
+                    instance.render();
                 });
             }
         };
@@ -204,7 +205,16 @@ var JSDatepicker;
                 step: { unit: "y", count: 1 },
                 headerFormat: "YYYY"
             },
-            template: "\n            <div class=\"t-months\">\n            <% \n                var t = {\n                    date: options.date,\n                    today: moment(),\n                    current: moment(date).startOf(\"year\")\n                };\n                \n                moment.monthsShort().forEach(function(m) {\n                    var item = {\n                        value: m,\n                        classes: [\"t-item\", \"t-month\"]\n                    };\n\n                    if(t.current.isSame(t.date, \"M\")) item.classes.push(\"active\");\n                    if(t.current.isSame(t.today, \"M\")) item.classes.push(\"t-today\");\n\n                    w('<div class=\"'+ item.classes.join(\" \") +'\">'+ item.value +'</div>');\n                    t.current.add(1, \"M\");\n                });\n            %>\n            </div>"
+            template: "\n            <div class=\"t-months\">\n            <% \n                var t = {\n                    date: options.date,\n                    today: moment(),\n                    current: moment(date).startOf(\"year\")\n                };\n                \n                moment.monthsShort().forEach(function(m) {\n                    var item = {\n                        value: m,\n                        classes: [\"t-item\", \"t-month\"]\n                    };\n\n                    if(t.current.isSame(t.date, \"M\")) item.classes.push(\"active\");\n                    if(t.current.isSame(t.today, \"M\")) item.classes.push(\"t-today\");\n\n                    w('<div class=\"'+ item.classes.join(\" \") +'\">'+ item.value +'</div>');\n                    t.current.add(1, \"M\");\n                });\n            %>\n            </div>",
+            onMounted: function (instance, element) {
+                var items = element.find(".t-item");
+                items.on("click", function (e) {
+                    var target = $(e.target);
+                    var value = target.index();
+                    instance.date.month(value);
+                    instance.render();
+                });
+            }
         };
     })(templates = JSDatepicker.templates || (JSDatepicker.templates = {}));
 })(JSDatepicker || (JSDatepicker = {}));
@@ -294,7 +304,14 @@ var JSDatepicker;
                     end: moment(date).add(amount - 1, step.unit).format(format),
                     start: moment(date).add(-(amount), step.unit).format(format)
                 };
-                picker.find(".t-nav").text(range.start + " - " + range.end);
+                picker.find(".t-head .t-nav .t-title").text(range.start + " - " + range.end);
+                var items = element.find(".t-item");
+                items.on("click", function (e) {
+                    var target = $(e.target);
+                    var value = parseInt(target.text());
+                    instance.date.year(value);
+                    instance.render();
+                });
             }
         };
     })(templates = JSDatepicker.templates || (JSDatepicker.templates = {}));

@@ -47,7 +47,16 @@ module JSDatepicker.templates {
                 start: moment(date).add(-(amount), step.unit).format(format)
             };
 
-            picker.find(".t-nav").text(`${range.start} - ${range.end}`);
+            picker.find(".t-head .t-nav .t-title").text(`${range.start} - ${range.end}`);
+
+            const items = element.find(".t-item");
+
+            items.on("click", (e) => {
+                const target = $(e.target);
+                const value = parseInt(target.text());
+                instance.date.year(value);
+                instance.render();
+            });
         }
     }
 }

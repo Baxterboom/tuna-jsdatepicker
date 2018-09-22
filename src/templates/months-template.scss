@@ -1,1 +1,5 @@
-.t-months {}
+.t-months {
+  .t-item {
+    @extend %item;
+  }
+}

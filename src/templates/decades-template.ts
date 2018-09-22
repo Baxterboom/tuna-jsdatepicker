@@ -50,7 +50,7 @@ module JSDatepicker.templates {
                 end: moment(date).add(amount, step.unit).format(format)
             };
 
-            picker.find(".t-nav").text(`${range.start} - ${range.end}`);
+            picker.find(".t-nav.t-title").text(`${range.start} - ${range.end}`);
         }
     }
 }

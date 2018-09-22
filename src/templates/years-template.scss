@@ -1,1 +1,5 @@
-.t-years {}
+.t-years {
+  .t-item {
+    @extend %item;
+  }
+}

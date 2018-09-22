@@ -1,8 +1,8 @@
-.t-jsdatepicker.t-picker .t-days .t-body .t-item:hover, .t-jsdatepicker.t-picker .t-weeks .t-item:hover {
+.t-jsdatepicker.t-picker .t-days .t-body .t-item:hover, .t-jsdatepicker.t-picker .t-weeks .t-item:hover, .t-jsdatepicker.t-picker .t-months .t-item:hover, .t-jsdatepicker.t-picker .t-years .t-item:hover, .t-jsdatepicker.t-picker .t-decades .t-item:hover {
   color: white;
   background: blue; }
 
-.t-jsdatepicker.t-picker .t-days .t-body .active.t-item, .t-jsdatepicker.t-picker .t-weeks .active.t-item, .t-jsdatepicker .active {
+.t-jsdatepicker.t-picker .t-days .t-body .active.t-item, .t-jsdatepicker.t-picker .t-weeks .active.t-item, .t-jsdatepicker.t-picker .t-months .active.t-item, .t-jsdatepicker.t-picker .t-years .active.t-item, .t-jsdatepicker.t-picker .t-decades .active.t-item, .t-jsdatepicker .active {
   color: white;
   background: blue;
   border: 1px solid white; }
@@ -12,7 +12,7 @@
   border: 1px solid white;
   background: darkgreen; }
 
-.t-jsdatepicker.t-picker .t-days .t-body .t-item, .t-jsdatepicker.t-picker .t-weeks .t-item {
+.t-jsdatepicker.t-picker .t-days .t-body .t-item, .t-jsdatepicker.t-picker .t-weeks .t-item, .t-jsdatepicker.t-picker .t-months .t-item, .t-jsdatepicker.t-picker .t-years .t-item, .t-jsdatepicker.t-picker .t-decades .t-item {
   cursor: pointer; }
 
 .t-jsdatepicker {
