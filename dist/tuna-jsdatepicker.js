@@ -260,7 +260,7 @@ var JSDatepicker;
             },
             template: "\n            <div class=\"t-weeks\">\n            <% \n                var t = {\n                    date: options.date,\n                    end: moment(date).add(10, \"w\").startOf(\"M\"),\n                    start: moment(date).add(-11, \"w\").endOf(\"M\"),\n                    today: moment(),\n                    current: null\n                };\n\n                t.current = moment(t.start);\n\n                while(t.current < t.end) {\n                    var item = {\n                        value:  t.current.isoWeek(), \n                        classes: [\"t-item\", \"t-week\"]\n                    };\n\n                    if(t.current.isSame(t.date, \"W\")) item.classes.push(\"active\");\n                    if(t.current.isSame(t.today, \"W\")) item.classes.push(\"t-today\");\n\n                    w('<div class=\"'+ item.classes.join(\" \")+ '\">'+ item.value +'</div>');\n                    t.current.add(1, \"w\");\n                }\n            %>\n            </div>",
             onMounted: function (instance, element) {
-                var items = element.find(".t-body .t-item");
+                var items = element.find(".t-item");
                 items.on("click", function (e) {
                     var target = $(e.target);
                     var value = parseInt(target.text());

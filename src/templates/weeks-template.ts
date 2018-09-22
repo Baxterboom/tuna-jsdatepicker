@@ -31,6 +31,16 @@ module JSDatepicker.templates {
                     t.current.add(1, "w");
                 }
             %>
-            </div>`
+            </div>`,
+        onMounted: function (instance: DatePicker, element: JQuery) {
+            const items = element.find(".t-item");
+
+            items.on("click", (e) => {
+                const target = $(e.target);
+                const value = parseInt(target.text());
+                instance.date = moment().day("Monday").week(value);
+                instance.render();
+            });
+        }
     }
 }
