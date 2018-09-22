@@ -39,7 +39,7 @@ module JSDatepicker.templates {
                     if(t.week != t.current.isoWeek()) {
                         if(t.week) w('</div>');
                         w('<div class="t-week">');
-                        w('<div class="t-item t-week">'+ (t.week = t.current.isoWeek()) +'</div>');
+                        w('<div class="t-item t-week"><%=(t.week = t.current.isoWeek())%></div>');
                     }
                     
                     var item = {
@@ -50,7 +50,7 @@ module JSDatepicker.templates {
                     if(isSame(t.current, options.date)) item.classes.push("active");
                     if(isSame(t.current, t.today)) item.classes.push("t-today");
 
-                    w('<div class="'+ item.classes.join(" ") +'">'+ item.value +'</div>');
+                    w('<div class="<%=item.classes.join(" ")%>"><%=item.value%></div>');
                     t.current.add(1, "d");
                 }
             %>

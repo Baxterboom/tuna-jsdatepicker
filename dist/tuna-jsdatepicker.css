@@ -1,24 +1,24 @@
-.t-jsdatepicker.t-picker .t-days .t-body .t-item:hover, .t-jsdatepicker.t-picker .t-weeks .t-item:hover, .t-jsdatepicker.t-picker .t-months .t-item:hover, .t-jsdatepicker.t-picker .t-years .t-item:hover, .t-jsdatepicker.t-picker .t-decades .t-item:hover {
+.t-jsdatepicker.t-picker .t-minutes .t-item:hover, .t-jsdatepicker.t-picker .t-hours .t-item:hover, .t-jsdatepicker.t-picker .t-days .t-body .t-item:hover, .t-jsdatepicker.t-picker .t-weeks .t-item:hover, .t-jsdatepicker.t-picker .t-months .t-item:hover, .t-jsdatepicker.t-picker .t-years .t-item:hover, .t-jsdatepicker.t-picker .t-decades .t-item:hover {
   color: white;
   background: blue; }
 
-.t-jsdatepicker.t-picker .t-days .t-body .active.t-item, .t-jsdatepicker.t-picker .t-weeks .active.t-item, .t-jsdatepicker.t-picker .t-months .active.t-item, .t-jsdatepicker.t-picker .t-years .active.t-item, .t-jsdatepicker.t-picker .t-decades .active.t-item, .t-jsdatepicker .active {
+.t-jsdatepicker.t-picker .t-minutes .active.t-item, .t-jsdatepicker.t-picker .t-hours .active.t-item, .t-jsdatepicker.t-picker .t-days .t-body .active.t-item, .t-jsdatepicker.t-picker .t-weeks .active.t-item, .t-jsdatepicker.t-picker .t-months .active.t-item, .t-jsdatepicker.t-picker .t-years .active.t-item, .t-jsdatepicker.t-picker .t-decades .active.t-item, .t-jsdatepicker .active {
   color: white;
   background: blue;
-  border: 1px solid white; }
+  outline: 1px solid white; }
 
 .t-jsdatepicker .t-today {
   color: white;
-  border: 1px solid white;
+  outline: 1px solid white;
   background: darkgreen; }
 
-.t-jsdatepicker.t-picker .t-days .t-body .t-item, .t-jsdatepicker.t-picker .t-weeks .t-item, .t-jsdatepicker.t-picker .t-months .t-item, .t-jsdatepicker.t-picker .t-years .t-item, .t-jsdatepicker.t-picker .t-decades .t-item {
+.t-jsdatepicker.t-picker .t-minutes .t-item, .t-jsdatepicker.t-picker .t-hours .t-item, .t-jsdatepicker.t-picker .t-days .t-body .t-item, .t-jsdatepicker.t-picker .t-weeks .t-item, .t-jsdatepicker.t-picker .t-months .t-item, .t-jsdatepicker.t-picker .t-years .t-item, .t-jsdatepicker.t-picker .t-decades .t-item {
   cursor: pointer; }
 
 .t-jsdatepicker {
   position: relative;
   background: silver;
-  border: 1px solid gray; }
+  outline: 1px solid gray; }
   .t-jsdatepicker.t-picker {
     position: absolute;
     display: table;
@@ -30,7 +30,8 @@
     .t-jsdatepicker.t-picker .t-body {
       display: table-row; }
     .t-jsdatepicker.t-picker .t-days,
-    .t-jsdatepicker.t-picker .t-time,
+    .t-jsdatepicker.t-picker .t-hours,
+    .t-jsdatepicker.t-picker .t-minutes,
     .t-jsdatepicker.t-picker .t-weeks,
     .t-jsdatepicker.t-picker .t-years,
     .t-jsdatepicker.t-picker .t-months,
@@ -39,7 +40,8 @@
       flex-wrap: wrap;
       justify-content: center; }
       .t-jsdatepicker.t-picker .t-days .t-item,
-      .t-jsdatepicker.t-picker .t-time .t-item,
+      .t-jsdatepicker.t-picker .t-hours .t-item,
+      .t-jsdatepicker.t-picker .t-minutes .t-item,
       .t-jsdatepicker.t-picker .t-weeks .t-item,
       .t-jsdatepicker.t-picker .t-years .t-item,
       .t-jsdatepicker.t-picker .t-months .t-item,
@@ -62,6 +64,11 @@
         text-align: center;
         vertical-align: middle;
         flex-grow: 2; }
+      .t-jsdatepicker.t-picker .t-head .t-view {
+        padding: 5px;
+        margin: 0 100px; }
+        .t-jsdatepicker.t-picker .t-head .t-view option {
+          text-align: center; }
       .t-jsdatepicker.t-picker .t-head .t-prev::before,
       .t-jsdatepicker.t-picker .t-head .t-next::before {
         content: " ";
@@ -75,6 +82,9 @@
         transform: rotate(135deg); }
       .t-jsdatepicker.t-picker .t-head .t-next::before {
         transform: rotate(-45deg); }
+    .t-jsdatepicker.t-picker .t-foot {
+      padding: 10px;
+      text-align: center; }
     .t-jsdatepicker.t-picker .t-days {
       flex-direction: column; }
       .t-jsdatepicker.t-picker .t-days .t-head {
@@ -86,9 +96,6 @@
       .t-jsdatepicker.t-picker .t-days .t-item {
         display: table-cell;
         width: 12%; }
-    .t-jsdatepicker.t-picker .t-foot {
-      padding: 10px;
-      text-align: center; }
   .t-jsdatepicker::before {
     content: "";
     position: absolute;

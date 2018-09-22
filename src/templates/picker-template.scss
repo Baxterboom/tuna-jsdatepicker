@@ -14,7 +14,8 @@
     }
 
     .t-days,
-    .t-time,
+    .t-hours,
+    .t-minutes,
     .t-weeks,
     .t-years,
     .t-months,
@@ -31,12 +32,14 @@
         }
     }
 
-    @import "./templates/head-template.scss";
-    @import "./templates/time-template.scss";
-    @import "./templates/days-template.scss";
-    @import "./templates/weeks-template.scss";
-    @import "./templates/months-template.scss";
-    @import "./templates/years-template.scss";
-    @import "./templates/decades-template.scss";
-    @import "./templates/foot-template.scss";
+    @import "./head-template.scss";
+    @import "./foot-template.scss";
+
+    @import "./views/minutes-template.scss";
+    @import "./views/hours-template.scss";
+    @import "./views/days-template.scss";
+    @import "./views/weeks-template.scss";
+    @import "./views/months-template.scss";
+    @import "./views/years-template.scss";
+    @import "./views/decades-template.scss";
 }

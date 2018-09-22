@@ -32,7 +32,7 @@ module JSDatepicker.templates {
                     if(t.date.isBetween(t.current, t.next, "Y", "[]")) item.classes.push("active");
                     if(t.today.isBetween(t.current, t.next, "Y", "[]")) item.classes.push("t-today");
                     
-                    w('<div class="'+ item.classes.join(" ")+ '">'+ item.value +' - '+ t.next.year() + '</div>');
+                    w('<div class="<%=item.classes.join(" ")%>"><%=item.value +' - '+ t.next.year()%></div>');
                     t.current = t.next;
                 }
             %>

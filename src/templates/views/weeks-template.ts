@@ -27,7 +27,7 @@ module JSDatepicker.templates {
                     if(t.current.isSame(t.date, "W")) item.classes.push("active");
                     if(t.current.isSame(t.today, "W")) item.classes.push("t-today");
 
-                    w('<div class="'+ item.classes.join(" ")+ '">'+ item.value +'</div>');
+                    w('<div class="<%=item.classes.join(" ")%>"><%=item.value%></div>');
                     t.current.add(1, "w");
                 }
             %>

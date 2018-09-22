@@ -1,6 +1,6 @@
 module JSDatepicker {
     export enum navigation { back, forward };
-    export type view = "time" | "days" | "weeks" | "months" | "years" | "decades" | undefined;
+    export type view = "minutes" | "hours" | "days" | "weeks" | "months" | "years" | "decades" | undefined;
 
     export interface IRange<T> { start: T; end: T; }
     export interface IDateRange extends IRange<moment.Moment> { }
@@ -36,7 +36,7 @@ module JSDatepicker {
 
         static options: IOptions = {
             view: "days",
-            views: ["time", "days", "weeks", "months", "years", "decades"],
+            views: ["minutes", "hours", "days", "weeks", "months", "years", "decades"],
             dateFormat: moment.localeData().longDateFormat("L"),
             inputFormat: moment.localeData().longDateFormat("L")
         };

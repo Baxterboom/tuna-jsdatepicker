@@ -6,12 +6,12 @@
 %active {
     color: white;
     background: blue;
-    border: 1px solid white;
+    outline: 1px solid white;
 }
 
 %today {
     color: white;
-    border: 1px solid white;
+    outline: 1px solid white;
     background: darkgreen
 }
 
@@ -29,9 +29,10 @@
 
 .t-jsdatepicker {
     @import "./templates/picker-template.scss";
+
     position: relative;
     background: silver;
-    border: 1px solid gray;
+    outline: 1px solid gray;
 
     &::before {
         content: "";

@@ -18,9 +18,17 @@
         flex-grow: 2;
     }
 
+    .t-view {
+        padding: 5px;
+        margin: 0 100px;
+
+        option {
+            text-align: center;
+        }
+    }
+
     .t-prev,
     .t-next {
-
         &::before {
             content: " ";
             display: inline-block;
