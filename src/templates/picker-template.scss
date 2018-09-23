@@ -1,8 +1,27 @@
-&.t-picker {
+.t-jsdatepicker-picker {
     position: absolute;
+    top: 25px;
     display: table;
     width: 280px;
     z-index: 1;
+    border: 1px solid silver;
+    border-radius: 5px;
+    box-shadow: 2px 2px 9px silver;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 12px;
+
+    .t-other {
+        color: lavender;
+    }
+
+    .t-today {
+        @extend %today;
+        padding: 3px 26px;
+    }
+
+    .active {
+        @extend %active;
+    }
 
     &::before {
         content: none;
@@ -35,8 +54,6 @@
     @import "./head-template.scss";
     @import "./foot-template.scss";
 
-    @import "./views/minutes-template.scss";
-    @import "./views/hours-template.scss";
     @import "./views/days-template.scss";
     @import "./views/weeks-template.scss";
     @import "./views/months-template.scss";

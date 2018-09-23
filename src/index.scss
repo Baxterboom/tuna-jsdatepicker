@@ -1,63 +1,65 @@
 %hover {
-    color: white;
-    background: blue;
+    color: white !important;
+    opacity: 0.2;
+    background: teal;
 }
 
 %active {
     color: white;
-    background: blue;
-    outline: 1px solid white;
+    background-color: teal;
 }
 
 %today {
+    border: 1px solid teal;
+    border-radius: 25px;
+    background: none;
+}
+
+@mixin item($active, $hover) {
+    @if ($active) {
+        &.active {
+            @extend %active;
+        }
+    }
+
+    @if ($hover) {
+        cursor: pointer;
+
+        &:hover {
+            @extend %hover;
+        }
+    }
+}
+
+%head-color {
     color: white;
-    outline: 1px solid white;
-    background: darkgreen
+    background: teal;
 }
 
-%item {
-    cursor: pointer;
-
-    &.active {
-        @extend %active;
-    }
-
-    &:hover {
-        @extend %hover;
-    }
-}
+@import "./templates/picker-template.scss";
 
 .t-jsdatepicker {
-    @import "./templates/picker-template.scss";
-
     position: relative;
-    background: silver;
-    outline: 1px solid gray;
+
 
     &::before {
         content: "";
-        position: absolute;
-        right: 0;
         display: block;
-        width: 20px;
-        height: 20px;
         position: absolute;
-        background: red;
+        top: 3px;
+        right: 3px;
+        width: 15px;
+        height: 15px;
+        cursor: pointer;
+        background-image: url(./res/picker.svg);
+        background-size: cover;
     }
 
     .t-hidden {
         display: none !important;
     }
 
-    .t-today {
-        @extend %today;
-    }
-
-    .active {
-        @extend %active;
-    }
-
     .t-input {
-        width: 100%;
+        padding-right: 25px;
     }
 }

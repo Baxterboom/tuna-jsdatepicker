@@ -7,9 +7,16 @@
 
     .t-body {
         display: table-row;
+        border-top: 1px solid white;
 
         .t-item {
-            @extend %item;
+            &.t-day {
+                @include item(true, true);
+            }
+
+            &.t-week {
+                color: gray;
+            }
         }
     }
 
@@ -20,9 +27,5 @@
     .t-item {
         display: table-cell;
         width: 12%;
-
-        // &:hover {
-        //     @extend %hover;
-        // }
     }
 }

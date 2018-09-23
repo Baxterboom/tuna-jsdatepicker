@@ -11,6 +11,8 @@ module JSDatepicker {
         date?: string | moment.Moment | Date;
         dateFormat?: string
         inputFormat?: string;
+        showToday: boolean;
+        showNavigator: boolean;
 
         onChange?: (date: moment.Moment, element: JQuery) => void;
     }
@@ -21,8 +23,8 @@ module JSDatepicker {
         headerFormat?: string;
     }
 
-    export interface ITemplate {
-        config: IConfig;
+    export interface ITemplate<T=IConfig> {
+        config: T;
         template: string;
         onMounted?: (instance: DatePicker, element: JQuery) => void;
     }
@@ -36,9 +38,11 @@ module JSDatepicker {
 
         static options: IOptions = {
             view: "days",
-            views: ["minutes", "hours", "days", "weeks", "months", "years", "decades"],
+            views: ["days", "months", "years", "decades"],
             dateFormat: moment.localeData().longDateFormat("L"),
-            inputFormat: moment.localeData().longDateFormat("L")
+            inputFormat: moment.localeData().longDateFormat("L"),
+            showToday: true,
+            showNavigator: false
         };
 
         constructor(target: any, public options: IOptions) {
@@ -51,19 +55,11 @@ module JSDatepicker {
             this.input = $(target);
             this.input.after(this.element);
             this.input.addClass("t-input");
+            //this.input.on("click", () => this.render());
 
             this.element.append(this.input);
             this.render();
         };
-
-        step(config: IConfig, forward: boolean): void {
-            if (!config.step) return;
-            const step = config.step;
-            const count = step.count;
-            const amount: any = forward ? count : -(count);
-            this.date = moment(this.date).add(amount, step.unit);
-            this.render();
-        }
 
         go(nav: navigation) {
             const views = this.options.views;
@@ -72,6 +68,15 @@ module JSDatepicker {
             index += nav == navigation.forward ? 1 : -1;
 
             this.view = views[index] || this.options.view as view;
+            this.render();
+        }
+
+        step(config: IConfig, forward: boolean): void {
+            if (!config.step) return;
+            const step = config.step;
+            const count = step.count;
+            const amount: any = forward ? count : -(count);
+            this.date = moment(this.date).add(amount, step.unit);
             this.render();
         }
 
@@ -89,11 +94,11 @@ module JSDatepicker {
 
         notifyChange() {
             const date = this.date;
-            this.options.date = date;
-            this.input.val(moment(date).format(this.options.inputFormat));
-
-            if (this.view != this.options.view || !this.options.onChange) return;
-            this.options.onChange(this.date, this.input);
+            if (this.view === this.options.view) {
+                this.options.date = date;
+                this.input.val(moment(date).format(this.options.inputFormat));
+                if (this.options.onChange) this.options.onChange(this.date, this.input);
+            }
         }
     }
 

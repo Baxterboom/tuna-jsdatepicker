@@ -27,13 +27,13 @@ module JSDatepicker.templates {
                         classes: ["t-item", "t-year"]
                     };
 
-                    t.next = moment(t.current).add(11, "y");
+                    t.next = moment(t.current).add(10, "y");
 
                     if(t.date.isBetween(t.current, t.next, "Y", "[]")) item.classes.push("active");
                     if(t.today.isBetween(t.current, t.next, "Y", "[]")) item.classes.push("t-today");
                     
                     w('<div class="<%=item.classes.join(" ")%>"><%=item.value +' - '+ t.next.year()%></div>');
-                    t.current = t.next;
+                    t.current = t.next.add(1, "y");
                 }
             %>
             </div>`,
@@ -47,7 +47,7 @@ module JSDatepicker.templates {
             const amount = step.count / 2;
             const range = {
                 start: moment(date).add(-(amount), step.unit).format(format),
-                end: moment(date).add(amount, step.unit).format(format)
+                end: moment(date).add(amount + 9, step.unit).format(format)
             };
 
             picker.find(".t-nav.t-title").text(`${range.start} - ${range.end}`);

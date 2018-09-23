@@ -1,5 +1,31 @@
 .t-weeks {
-  .t-item {
-    @extend %item;
-  }
+    .t-body {
+        .t-week {
+            &.active {
+                @include item(true, true);
+
+                .t-week {
+                    position: relative;
+                    background: white;
+                    color: teal;
+                    font-weight: bold;
+
+                    &::after {
+                        content: " ";
+                        position: absolute;
+                        top: 14px;
+                        right: -5px;
+                        width: 10px;
+                        height: 10px;
+                        transform: rotate(135deg);
+                        @extend %head-color;
+                    }
+                }
+            }
+
+            .t-item {
+                border-radius: 0;
+            }
+        }
+    }
 }

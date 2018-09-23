@@ -3,7 +3,7 @@ module JSDatepicker.templates {
         config: {
             name: "picker"
         },
-        template: `<div class="t-jsdatepicker t-picker"></div>`,
+        template: `<div class="t-jsdatepicker-picker"></div>`,
         onMounted: (instance: DatePicker, element: JQuery) => {
             if (instance.picker) instance.picker.remove();
 

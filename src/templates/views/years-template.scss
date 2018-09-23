@@ -1,5 +1,5 @@
 .t-years {
   .t-item {
-    @extend %item;
+    @include item(true, true);
   }
 }

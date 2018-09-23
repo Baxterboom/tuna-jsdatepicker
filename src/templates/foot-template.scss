@@ -1,4 +1,11 @@
 .t-foot {
     padding: 10px;
     text-align: center;
+
+    .t-nav.t-view {
+        padding: 2px;
+        border: 1px solid teal;
+        border-radius: 15px;
+        text-transform: capitalize;
+    }
 }

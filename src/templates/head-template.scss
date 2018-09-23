@@ -1,14 +1,16 @@
 .t-head {
+    $text-color: white;
     display: flex;
     flex-direction: row;
     justify-content: center;
-
+    @extend %head-color;
 
     button {
         border: 0;
         margin: 2px;
         cursor: pointer;
         background: none;
+        @extend %head-color;
     }
 
     .t-nav {
@@ -16,14 +18,9 @@
         text-align: center;
         vertical-align: middle;
         flex-grow: 2;
-    }
 
-    .t-view {
-        padding: 5px;
-        margin: 0 100px;
-
-        option {
-            text-align: center;
+        .t-title {
+            font-size: 14px;
         }
     }
 
@@ -32,20 +29,28 @@
         &::before {
             content: " ";
             display: inline-block;
-            border: solid black;
-            border-width: 0 3px 3px 0;
+            border: solid $text-color;
+            border-width: 0 2px 2px 0;
             width: 10px;
             height: 10px;
             margin: 10px;
+            @extend %head-color;
         }
     }
 
-    .t-prev::before {
-        transform: rotate(135deg);
+    .t-prev {
+        text-align: left;
+
+        &::before {
+            transform: rotate(135deg);
+        }
     }
 
-    .t-next::before {
-        transform: rotate(-45deg);
-    }
+    .t-next {
+        text-align: right;
 
+        &::before {
+            transform: rotate(-45deg);
+        }
+    }
 }
