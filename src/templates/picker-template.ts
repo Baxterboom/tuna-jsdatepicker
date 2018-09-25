@@ -5,12 +5,9 @@ module JSDatepicker.templates {
         },
         template: `<div class="t-jsdatepicker-picker"></div>`,
         onMounted: (instance: DatePicker, element: JQuery) => {
-            if (instance.picker) instance.picker.remove();
-
-            instance.picker = element;
             const t: any = templates;
             const view = instance.view as string;
-            const template = t[view];
+            const template = t[view] as ITemplate;
 
             const head = $.extend({}, templates.head);
             $.extend(head.config, template.config, head.config);

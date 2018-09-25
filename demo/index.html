@@ -17,8 +17,9 @@
         function onload() {
             JSDatepicker.create("#datepicker", { 
                 date: moment().add(1, "M").add(2, "H"),
-                // views: ["days", "weeks", "weeks", "months", "years", "decades"],
-                view: "days"
+                views: ["months", "years", "decades"],
+                view: "weeks",
+                placement: "#xxx"
             });
             render();
         }
@@ -36,7 +37,7 @@
             const templates = JSDatepicker.templates;
 
             for(var item in templates){
-                console.log(item);
+                // console.log(item);
                 if(!templates[item].template) continue;
                 templates.mount(templates[item], datepicker, parent).attr("title", item);
             }
@@ -64,7 +65,6 @@
         }
 
         #templates > div {
-            width: 280px;
             margin: 20px;
             padding: 20px;
             border: 1px dashed teal;
@@ -90,6 +90,7 @@
 <body onload="onload()">
     <input type="text" id="datepicker">
     <div id="templates" class="t-jsdatepicker-picker"></div>
+    <div id="xxx"></div>
 </body>
 
 </html>

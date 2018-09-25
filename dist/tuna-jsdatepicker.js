@@ -7,9 +7,24 @@ var JSDatepicker;
         navigation[navigation["forward"] = 1] = "forward";
     })(navigation = JSDatepicker.navigation || (JSDatepicker.navigation = {}));
     ;
+    function registerOutsideClickEventHandler(selector, callback) {
+        var outsideClickListener = function (event) {
+            var inside = $(event.target).closest(selector).length;
+            if (inside)
+                return;
+            cancel();
+            callback();
+        };
+        setTimeout(function () { return document.addEventListener('click', outsideClickListener); });
+        var cancel = function () { return document.removeEventListener('click', outsideClickListener); };
+        return cancel;
+    }
+    JSDatepicker.registerOutsideClickEventHandler = registerOutsideClickEventHandler;
     var DatePicker = /** @class */ (function () {
         function DatePicker(target, options) {
+            var _this = this;
             this.options = options;
+            this.cancelOutsideClickEventHandler = function () { };
             this.options = $.extend(DatePicker.options, this.options);
             this.date = moment(this.options.date);
             this.view = this.options.view || "days";
@@ -17,9 +32,8 @@ var JSDatepicker;
             this.input = $(target);
             this.input.after(this.element);
             this.input.addClass("t-input");
-            //this.input.on("click", () => this.render());
+            this.input.on("click", function () { return _this.toggle(); });
             this.element.append(this.input);
-            this.render();
         }
         ;
         DatePicker.prototype.go = function (nav) {
@@ -28,6 +42,18 @@ var JSDatepicker;
             index += nav == navigation.forward ? 1 : -1;
             this.view = views[index] || this.options.view;
             this.render();
+        };
+        DatePicker.prototype.toggle = function (close) {
+            return close || this.picker
+                ? this.close()
+                : this.render();
+        };
+        DatePicker.prototype.close = function () {
+            if (this.picker) {
+                this.picker.remove();
+                this.picker = undefined;
+            }
+            this.cancelOutsideClickEventHandler();
         };
         DatePicker.prototype.step = function (config, forward) {
             if (!config.step)
@@ -38,15 +64,35 @@ var JSDatepicker;
             this.date = moment(this.date).add(amount, step.unit);
             this.render();
         };
+        DatePicker.prototype.place = function (placement) {
+            var _this = this;
+            if (!this.picker)
+                return;
+            var offset = this.input.offset();
+            var dimensions = this.input.outerHeight() || 0;
+            if (offset && !this.picker.closest(this.element).length) {
+                this.picker.css({ top: offset.top + dimensions, left: offset.left });
+            }
+            this.cancelOutsideClickEventHandler = registerOutsideClickEventHandler(this.picker, function () { return _this.close(); });
+        };
         DatePicker.prototype.render = function () {
             var _this = this;
-            console.time("render");
-            JSDatepicker.templates.mount(JSDatepicker.templates.picker, this, this.element)
-                .find(".t-item").on("click", function () {
+            var target = this.options.placement
+                ? $(this.options.placement)
+                : this.element;
+            if (!target.length)
+                target = this.element;
+            if (this.options.placement instanceof Function) {
+                target = this.options.placement(this);
+            }
+            this.close();
+            this.picker = JSDatepicker.templates.mount(JSDatepicker.templates.picker, this, target);
+            this.picker.find(".t-item").on("click", function () {
                 _this.notifyChange();
                 _this.go(navigation.back);
             });
-            console.timeEnd("render");
+            this.place(target);
+            return this.picker;
         };
         DatePicker.prototype.notifyChange = function () {
             var date = this.date;
@@ -55,6 +101,7 @@ var JSDatepicker;
                 this.input.val(moment(date).format(this.options.inputFormat));
                 if (this.options.onChange)
                     this.options.onChange(this.date, this.input);
+                this.close();
             }
         };
         DatePicker.options = {
@@ -120,7 +167,9 @@ var JSDatepicker;
     (function (templates) {
         templates.head = {
             config: {
-                name: "head"
+                name: "head",
+                step: { count: 1, unit: "M" },
+                headerFormat: "DD MMMM YYYY"
             },
             template: "\n            <div class=\"t-head\">\n                <% if(template.config.step) w('<button class=\"t-nav t-prev\"></button>'); %>\n                <button class=\"t-nav t-title\"><%=date.format(template.config.headerFormat)%></button>\n                <% if(template.config.step) w('<button class=\"t-nav t-next\"></button>'); %>\n            </div>\n            ",
             onMounted: function (instance, element) {
@@ -160,9 +209,6 @@ var JSDatepicker;
             },
             template: "<div class=\"t-jsdatepicker-picker\"></div>",
             onMounted: function (instance, element) {
-                if (instance.picker)
-                    instance.picker.remove();
-                instance.picker = element;
                 var t = templates;
                 var view = instance.view;
                 var template = t[view];

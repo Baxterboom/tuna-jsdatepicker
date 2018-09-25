@@ -14,6 +14,7 @@ module JSDatepicker {
         showToday: boolean;
         showNavigator: boolean;
 
+        placement?: ((datepicker: DatePicker) => JQuery) | JQuery;
         onChange?: (date: moment.Moment, element: JQuery) => void;
     }
 
@@ -29,12 +30,27 @@ module JSDatepicker {
         onMounted?: (instance: DatePicker, element: JQuery) => void;
     }
 
+    export function registerOutsideClickEventHandler(selector: any, callback: () => void) {
+        const outsideClickListener = (event: any) => {
+            const inside = $(event.target).closest(selector).length;
+            if (inside) return;
+            cancel();
+            callback();
+        }
+
+        setTimeout(() => document.addEventListener('click', outsideClickListener));
+        const cancel = () => document.removeEventListener('click', outsideClickListener);
+        return cancel;
+    }
+
     export class DatePicker {
         date: moment.Moment;
         view: view;
         input: JQuery;
         picker?: JQuery;
         element: JQuery;
+
+        private cancelOutsideClickEventHandler = () => { };
 
         static options: IOptions = {
             view: "days",
@@ -55,10 +71,8 @@ module JSDatepicker {
             this.input = $(target);
             this.input.after(this.element);
             this.input.addClass("t-input");
-            //this.input.on("click", () => this.render());
-
+            this.input.on("click", () => this.toggle());
             this.element.append(this.input);
-            this.render();
         };
 
         go(nav: navigation) {
@@ -71,6 +85,21 @@ module JSDatepicker {
             this.render();
         }
 
+        toggle(close?: boolean) {
+            return close || this.picker
+                ? this.close()
+                : this.render();
+        }
+
+        close() {
+            if (this.picker) {
+                this.picker.remove();
+                this.picker = undefined;
+            }
+
+            this.cancelOutsideClickEventHandler();
+        }
+
         step(config: IConfig, forward: boolean): void {
             if (!config.step) return;
             const step = config.step;
@@ -80,16 +109,38 @@ module JSDatepicker {
             this.render();
         }
 
-        render(): void {
-            console.time("render");
+        place(placement: JQuery) {
+            if (!this.picker) return;
+            const offset = this.input.offset();
+            const dimensions = this.input.outerHeight() || 0;
 
-            templates.mount(templates.picker, this, this.element)
-                .find(".t-item").on("click", () => {
-                    this.notifyChange();
-                    this.go(navigation.back);
-                });
+            if (offset && !this.picker.closest(this.element).length) {
+                this.picker.css({ top: offset.top + dimensions, left: offset.left });
+            }
+            this.cancelOutsideClickEventHandler = registerOutsideClickEventHandler(this.picker, () => this.close());
+        }
 
-            console.timeEnd("render");
+        render() {
+            let target: any = this.options.placement
+                ? $(this.options.placement)
+                : this.element;
+
+            if (!target.length) target = this.element;
+            if (this.options.placement instanceof Function) {
+                target = this.options.placement(this);
+            }
+
+            this.close();
+
+            this.picker = templates.mount(templates.picker, this, target);
+            this.picker.find(".t-item").on("click", () => {
+                this.notifyChange();
+                this.go(navigation.back);
+            });
+
+            this.place(target);
+
+            return this.picker;
         }
 
         notifyChange() {
@@ -98,6 +149,7 @@ module JSDatepicker {
                 this.options.date = date;
                 this.input.val(moment(date).format(this.options.inputFormat));
                 if (this.options.onChange) this.options.onChange(this.date, this.input);
+                this.close();
             }
         }
     }

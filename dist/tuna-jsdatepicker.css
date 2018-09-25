@@ -19,15 +19,25 @@
 
 .t-jsdatepicker-picker {
   position: absolute;
-  top: 25px;
   display: table;
-  width: 280px;
+  width: 300px;
   z-index: 1;
   border: 1px solid silver;
   border-radius: 5px;
   box-shadow: 2px 2px 9px silver;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-size: 12px; }
+  .t-jsdatepicker-picker::after {
+    content: " ";
+    position: absolute;
+    top: -5px;
+    left: 15px;
+    width: 10px;
+    height: 10px;
+    transform: rotate(135deg);
+    color: white;
+    background: teal;
+    z-index: 1; }
   .t-jsdatepicker-picker .t-other {
     color: lavender; }
   .t-jsdatepicker-picker .t-today {
@@ -149,7 +159,6 @@
     right: 3px;
     width: 15px;
     height: 15px;
-    cursor: pointer;
     background-image: url(./res/picker.svg);
     background-size: cover; }
   .t-jsdatepicker .t-hidden {

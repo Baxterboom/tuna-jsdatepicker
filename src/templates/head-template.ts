@@ -1,7 +1,9 @@
 module JSDatepicker.templates {
     export const head: ITemplate = {
         config: {
-            name: "head"
+            name: "head",
+            step: { count: 1, unit: "M" },
+            headerFormat: "DD MMMM YYYY"
         },
         template: `
             <div class="t-head">

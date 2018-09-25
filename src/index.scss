@@ -41,7 +41,6 @@
 .t-jsdatepicker {
     position: relative;
 
-
     &::before {
         content: "";
         display: block;
@@ -50,7 +49,6 @@
         right: 3px;
         width: 15px;
         height: 15px;
-        cursor: pointer;
         background-image: url(./res/picker.svg);
         background-size: cover;
     }
