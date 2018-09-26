@@ -1,8 +1,9 @@
-$bg-color: teal;
+$top-color: teal;
+$sub-color: white;
 
 %head-color {
-    color: white !important;
-    background: $bg-color;
+    color: $sub-color !important;
+    background: $top-color;
 }
 
 %hover {
@@ -15,7 +16,7 @@ $bg-color: teal;
 }
 
 %today {
-    border: 1px solid $bg-color;
+    border: 1px solid $top-color;
     border-radius: 25px;
     background: none;
 }
@@ -40,17 +41,24 @@ $bg-color: teal;
 
 .t-jsdatepicker {
     position: relative;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
 
-    &::before {
-        content: "";
-        display: block;
+    .t-trigger {
+        cursor: pointer;
         position: absolute;
-        top: 3px;
-        right: 3px;
-        width: 15px;
-        height: 15px;
-        background-image: url(./res/picker.svg);
-        background-size: cover;
+        padding-right: 10px;
+
+        &::before {
+            content: "";
+            display: block;
+
+            width: 15px;
+            height: 15px;
+            background-image: url(./res/picker.svg);
+            background-size: cover;
+        }
     }
 
     .t-hidden {
@@ -58,6 +66,7 @@ $bg-color: teal;
     }
 
     .t-input {
+        flex-grow: 1;
         padding-right: 25px;
     }
 }

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="/node_modules/moment/moment.js"></script>
+    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="/node_modules/tuna-jstemplate/dist/tuna-jstemplate.js"></script>
+
+    <link rel="stylesheet" href="./index.css">
+    <link rel="stylesheet" href="./dist/tuna-jsdatepicker.css">
+    <script src="./dist/tuna-jsdatepicker.js"></script>
+    <title>Document</title>
+    <script>
+        function onload() {
+            render();
+        }
+
+        function render() {
+            const parent = $("#templates");
+            const datepicker = new JSDatepicker.create($("#templates1"), {
+                date: moment(),
+                showToday: true,
+                showNavigator: true
+            });
+
+            parent.html();
+
+            const templates = JSDatepicker.templates;
+
+            for (var item in templates) {
+                // console.log(item);
+                if (!templates[item].template) continue;
+                // parent.append("<center>" + item + " template</center>")
+                templates.mount(templates[item], datepicker, parent).attr("title", item);
+            }
+
+            parent.find(".t-item").on("click", function () {
+                datepicker.date.add(1, "M");
+                datepicker.render();
+            });
+        }
+    </script>
+    <style>
+        #templates {
+            margin: 30px;
+        }
+
+        #templates .t-jsdatepicker-picker {
+            display: none;
+        }
+
+        #templates>div {
+            margin: 20px;
+            padding: 20px;
+            border: 1px dashed silver;
+        }
+    </style>
+</head>
+
+<body onload="onload()">
+    <h1>Tuna JSDatepicker</h1> >> <a href="index.html">view demo</a>
+    <div id="templates" class="t-jsdatepicker-picker"></div>
+</body>
+
+</html>

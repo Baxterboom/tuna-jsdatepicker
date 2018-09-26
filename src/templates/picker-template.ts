@@ -5,6 +5,8 @@ module JSDatepicker.templates {
         },
         template: `<div class="t-jsdatepicker-picker"></div>`,
         onMounted: (instance: DatePicker, element: JQuery) => {
+            instance.picker = element; //need to set this here since templates might need it
+
             const t: any = templates;
             const view = instance.view as string;
             const template = t[view] as ITemplate;

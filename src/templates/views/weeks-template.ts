@@ -70,7 +70,7 @@ module JSDatepicker.templates {
                 </div>
             </div>`,
         onMounted: function (instance: DatePicker, element: JQuery) {
-            const items = element.find(".t-body .t-day");
+            const items = element.find(".t-item.t-day");
 
             items.on("click", (e) => {
                 const target = $(e.target);

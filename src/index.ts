@@ -49,6 +49,8 @@ module JSDatepicker {
         input: JQuery;
         picker?: JQuery;
         element: JQuery;
+        trigger: JQuery;
+        placment: JQuery;
 
         private cancelOutsideClickEventHandler = () => { };
 
@@ -62,12 +64,14 @@ module JSDatepicker {
         };
 
         constructor(target: JQuery, public options: IOptions) {
-            this.options = $.extend(DatePicker.options, this.options);
+            this.options = $.extend({}, DatePicker.options, this.options);
             this.date = moment(this.options.date);
             this.view = this.options.view as view || "days";
 
             this.input = $(target);
             this.element = templates.parse(templates.main, this);
+            this.trigger = this.element.find(".t-trigger");
+            this.placment = $(this.options.placement || this.element);
 
             this.setupViews();
             this.setupElements();
@@ -76,8 +80,8 @@ module JSDatepicker {
         setupElements() {
             this.input.after(this.element);
             this.input.addClass("t-input");
-            this.input.on("click", () => this.toggle());
             this.element.append(this.input);
+            this.trigger.on("click", () => this.toggle());
         }
 
         setupViews() {
@@ -103,13 +107,17 @@ module JSDatepicker {
                 : this.render();
         }
 
-        close() {
+        remove() {
             if (this.picker) {
                 this.picker.remove();
                 this.picker = undefined;
             }
-
             this.cancelOutsideClickEventHandler();
+        }
+
+        close() {
+            this.remove();
+            this.view = this.options.view
         }
 
         step(config: IConfig, forward: boolean): void {
@@ -121,7 +129,7 @@ module JSDatepicker {
             this.render();
         }
 
-        place(placement: JQuery) {
+        place() {
             if (!this.picker) return;
             const offset = this.input.offset();
             const dimensions = (this.input.outerHeight() || 0) + 4;
@@ -129,38 +137,32 @@ module JSDatepicker {
             if (offset && !this.picker.closest(this.element).length) {
                 this.picker.css({ top: offset.top + dimensions, left: offset.left });
             }
+
             this.cancelOutsideClickEventHandler = registerOutsideClickEventHandler(this.picker, () => this.close());
         }
 
         render() {
-            let target = this.options.placement ? $(this.options.placement) : this.element;
-            if (!target.length) target = this.element;
-
-            this.close();
-
-            this.picker = templates.mount(templates.picker, this, target);
+            this.remove();
+            this.picker = templates.mount(templates.picker, this, this.placment);
             this.picker.find(".t-item").on("click", () => {
                 this.notifyChange();
-                if (!this.isCurrentView()) this.go(navigation.back);
+                this.go(navigation.back);
             });
 
-            this.place(target);
-
+            this.place();
             return this.picker;
-        }
-
-        isCurrentView(view?: view) {
-            return this.view = view || this.options.view;
         }
 
         notifyChange() {
             const date = this.date;
             if (this.view === this.options.view) {
-                this.options.date = date;
+
                 this.input.val(moment(date).format(this.options.inputFormat));
                 this.input.focus();
-                if (this.options.onChange) this.options.onChange(this.date, this.input);
+                this.options.date = date;
                 this.close();
+
+                if (this.options.onChange) this.options.onChange(this.date, this.input);
             }
         }
     }

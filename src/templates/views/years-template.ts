@@ -49,7 +49,7 @@ module JSDatepicker.templates {
 
             picker.find(".t-head .t-nav .t-title").text(`${range.start} - ${range.end}`);
 
-            const items = element.find(".t-item");
+            const items = element.find(".t-item.t-year");
 
             items.on("click", (e) => {
                 const target = $(e.target);

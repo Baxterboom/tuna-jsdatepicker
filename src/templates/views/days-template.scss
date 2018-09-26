@@ -7,7 +7,7 @@
 
     .t-body {
         display: table-row;
-        border-top: 1px solid white;
+        border-top: 1px solid $sub-color;
 
         .t-item {
             &.t-day {

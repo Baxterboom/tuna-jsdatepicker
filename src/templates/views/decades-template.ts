@@ -24,7 +24,7 @@ module JSDatepicker.templates {
                 while(t.current < t.end) {
                     var item = {
                         value: t.current.year(),
-                        classes: ["t-item", "t-year"]
+                        classes: ["t-item", "t-decade"]
                     };
 
                     t.next = moment(t.current).add(10, "y");
@@ -52,13 +52,11 @@ module JSDatepicker.templates {
 
             picker.find(".t-nav.t-title").text(`${range.start} - ${range.end}`);
 
-
-            const items = element.find(".t-item");
+            const items = element.find(".t-item.t-decade");
             items.on("click", (e) => {
                 let value = 0;
 
-                const target = $(e.target);
-                target.text().split(" - ").forEach(item => {
+                $(e.target).text().split(" - ").forEach(item => {
                     value += parseInt(item);
                 });
 

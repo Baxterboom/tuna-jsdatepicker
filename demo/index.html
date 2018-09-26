@@ -9,88 +9,70 @@
     <script src="/node_modules/jquery/dist/jquery.min.js"></script>
     <script src="/node_modules/tuna-jstemplate/dist/tuna-jstemplate.js"></script>
 
+    <link rel="stylesheet" href="./index.css">
     <link rel="stylesheet" href="./dist/tuna-jsdatepicker.css">
     <script src="./dist/tuna-jsdatepicker.js"></script>
     <title>Document</title>
     <script>
 
         function onload() {
-            JSDatepicker.create("#datepicker", { 
-                date: moment().add(1, "M").add(2, "H"),
+
+            JSDatepicker.create("#days", { 
+                date: moment(),
+                views: ["weeks", "years", "decades"],
+                view: "days",
+                placement: "#placement"
+            });
+
+            JSDatepicker.create("#weeks", { 
+                date: moment(),
                 views: ["months", "years", "decades"],
                 view: "weeks",
-                placement: "#xxx"
+                placement: "#placement"
             });
-            render();
-        }
 
-        function render() {
-            const parent = $("#templates");
-            const datepicker = new JSDatepicker.create($("#templates-hidden1"), {
+            JSDatepicker.create("#months", { 
                 date: moment(),
-                showToday: true,
-                showNavigator: true
+                views: ["weeks", "years", "decades"],
+                view: "months",
+                placement: "#placement"
             });
 
-            parent.html();
+            JSDatepicker.create("#years", { 
+                date: moment(),
+                views: ["weeks", "months", "decades"],
+                view: "years",
+                placement: "#placement"
+            });
 
-            const templates = JSDatepicker.templates;
-
-            for(var item in templates){
-                // console.log(item);
-                if(!templates[item].template) continue;
-                templates.mount(templates[item], datepicker, parent).attr("title", item);
-            }
-
-            parent.find(".t-item").on("click", function () {
-                datepicker.date.add(1, "M");
-                datepicker.render();
+            JSDatepicker.create("#decades", { 
+                date: moment(),
+                views: ["weeks", "months",  "years"],
+                view: "decades",
+                placement: "#placement"
             });
         }
+
     </script>
     <style>
-        body {
-            margin-top:50px;
-            display: flex;
-            flex-direction: row;
-        }
-      
-        #templates{
-            position: absolute;
-            top: 400px;
-        }
 
-        #templates .t-jsdatepicker-picker{
-            display: none;
+        #demo {
+            margin: 20px 0;
         }
-
-        #templates > div {
-            margin: 20px;
-            padding: 20px;
-            border: 1px dashed $bg-color;
-        }
-
-        jstemplate {
-            display: block;
-            width: 100%;
-            padding:20px;
-            background: red;
-            animation: blinker 1s linear infinite;
-        }
-
-        @keyframes blinker {
-            50% {
-                opacity: 0;
-            }
-        }
-
+     
     </style>
 </head>
 
 <body onload="onload()">
-    <input type="text" id="datepicker">
-    <div id="templates" class="t-jsdatepicker-picker"></div>
-    <div id="xxx"></div>
+    <h1>Tuna JSDatepicker</h1> >> <a href="templates.html">view templates</a>
+    <div id="demo">
+        <input type="text" id="days" placeholder="days">
+        <input type="text" id="weeks" placeholder="weeks">
+        <input type="text" id="months" placeholder="months">
+        <input type="text" id="years" placeholder="years">
+        <input type="text" id="decades" placeholder="decades">
+    </div>
+    <div id="placement"></div>
 </body>
 
 </html>

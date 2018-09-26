@@ -19,8 +19,8 @@
   border: 1px solid silver;
   border-radius: 5px;
   box-shadow: 2px 2px 9px silver;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-size: 12px; }
+  font-size: 12px;
+  background: white; }
   .t-jsdatepicker-picker .t-other {
     color: lavender; }
   .t-jsdatepicker-picker .t-today {
@@ -51,6 +51,10 @@
       margin: 10px;
       text-align: center;
       border-radius: 3px; }
+  .t-jsdatepicker-picker input,
+  .t-jsdatepicker-picker button,
+  .t-jsdatepicker-picker select {
+    font-family: inherit; }
   .t-jsdatepicker-picker .t-head {
     display: flex;
     flex-direction: row;
@@ -144,18 +148,23 @@
     cursor: pointer; }
 
 .t-jsdatepicker {
-  position: relative; }
-  .t-jsdatepicker::before {
-    content: "";
-    display: block;
+  position: relative;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center; }
+  .t-jsdatepicker .t-trigger {
+    cursor: pointer;
     position: absolute;
-    top: 3px;
-    right: 3px;
-    width: 15px;
-    height: 15px;
-    background-image: url(./res/picker.svg);
-    background-size: cover; }
+    padding-right: 10px; }
+    .t-jsdatepicker .t-trigger::before {
+      content: "";
+      display: block;
+      width: 15px;
+      height: 15px;
+      background-image: url(./res/picker.svg);
+      background-size: cover; }
   .t-jsdatepicker .t-hidden {
     display: none !important; }
   .t-jsdatepicker .t-input {
+    flex-grow: 1;
     padding-right: 25px; }

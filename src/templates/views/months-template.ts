@@ -29,7 +29,7 @@ module JSDatepicker.templates {
             %>
             </div>`,
         onMounted: function (instance: DatePicker, element: JQuery) {
-            const items = element.find(".t-item");
+            const items = element.find(".t-item.t-month");
 
             items.on("click", (e) => {
                 const target = $(e.target);

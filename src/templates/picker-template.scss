@@ -6,8 +6,8 @@
     border: 1px solid silver;
     border-radius: 5px;
     box-shadow: 2px 2px 9px silver;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 12px;
+    background: $sub-color;
 
     .t-other {
         color: lavender;
@@ -48,6 +48,12 @@
             text-align: center;
             border-radius: 3px;
         }
+    }
+
+    input,
+    button,
+    select {
+        font-family: inherit;
     }
 
     @import "./head-template.scss";

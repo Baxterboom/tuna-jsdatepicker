@@ -1,0 +1,40 @@
+body {
+    font-family: monospace;
+    background: whitesmoke;
+}
+
+h1 {
+    display: inline-block;
+}
+
+a {
+    color: teal;
+}
+
+input {
+    padding: 10px;
+}
+
+.t-jsdatepicker {
+    margin: 20px 0;
+    padding: 20px;
+    border: 1px dashed silver;
+    background: white;
+    border: 1px solid silver;
+    border-radius: 5px;
+    box-shadow: 2px 2px 9px silver;
+}
+
+jstemplate {
+    display: block;
+    width: 100%;
+    padding: 20px;
+    background: red;
+    animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
+}

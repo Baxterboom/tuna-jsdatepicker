@@ -3,13 +3,12 @@
         .t-week {
             @include item(true, true);
 
-
             &.active,
             &:hover {
                 .t-week {
                     position: relative;
-                    background: white;
-                    color: $bg-color;
+                    background: $sub-color;
+                    color: $top-color;
 
                     &::after {
                         content: " ";
