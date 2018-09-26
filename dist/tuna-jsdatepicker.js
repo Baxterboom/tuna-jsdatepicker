@@ -22,20 +22,30 @@ var JSDatepicker;
     JSDatepicker.registerOutsideClickEventHandler = registerOutsideClickEventHandler;
     var DatePicker = /** @class */ (function () {
         function DatePicker(target, options) {
-            var _this = this;
             this.options = options;
             this.cancelOutsideClickEventHandler = function () { };
             this.options = $.extend(DatePicker.options, this.options);
             this.date = moment(this.options.date);
             this.view = this.options.view || "days";
-            this.element = JSDatepicker.templates.parse(JSDatepicker.templates.main, this);
             this.input = $(target);
+            this.element = JSDatepicker.templates.parse(JSDatepicker.templates.main, this);
+            this.setupViews();
+            this.setupElements();
+        }
+        ;
+        DatePicker.prototype.setupElements = function () {
+            var _this = this;
             this.input.after(this.element);
             this.input.addClass("t-input");
             this.input.on("click", function () { return _this.toggle(); });
             this.element.append(this.input);
-        }
-        ;
+        };
+        DatePicker.prototype.setupViews = function () {
+            var options = this.options;
+            if (options.views.indexOf(options.view) < 0) {
+                options.views.unshift(options.view); //if view is missing, add as start view
+            }
+        };
         DatePicker.prototype.go = function (nav) {
             var views = this.options.views;
             var index = views.indexOf(this.view);
@@ -69,7 +79,7 @@ var JSDatepicker;
             if (!this.picker)
                 return;
             var offset = this.input.offset();
-            var dimensions = this.input.outerHeight() || 0;
+            var dimensions = (this.input.outerHeight() || 0) + 4;
             if (offset && !this.picker.closest(this.element).length) {
                 this.picker.css({ top: offset.top + dimensions, left: offset.left });
             }
@@ -77,28 +87,28 @@ var JSDatepicker;
         };
         DatePicker.prototype.render = function () {
             var _this = this;
-            var target = this.options.placement
-                ? $(this.options.placement)
-                : this.element;
+            var target = this.options.placement ? $(this.options.placement) : this.element;
             if (!target.length)
                 target = this.element;
-            if (this.options.placement instanceof Function) {
-                target = this.options.placement(this);
-            }
             this.close();
             this.picker = JSDatepicker.templates.mount(JSDatepicker.templates.picker, this, target);
             this.picker.find(".t-item").on("click", function () {
                 _this.notifyChange();
-                _this.go(navigation.back);
+                if (!_this.isCurrentView())
+                    _this.go(navigation.back);
             });
             this.place(target);
             return this.picker;
+        };
+        DatePicker.prototype.isCurrentView = function (view) {
+            return this.view = view || this.options.view;
         };
         DatePicker.prototype.notifyChange = function () {
             var date = this.date;
             if (this.view === this.options.view) {
                 this.options.date = date;
                 this.input.val(moment(date).format(this.options.inputFormat));
+                this.input.focus();
                 if (this.options.onChange)
                     this.options.onChange(this.date, this.input);
                 this.close();
@@ -325,7 +335,6 @@ var JSDatepicker;
                     var target = $(e.target);
                     var value = target.attr("data-date");
                     instance.date = moment(value).startOf("isoWeek");
-                    instance.render();
                 });
             }
         };

@@ -9,19 +9,6 @@
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 12px;
 
-    &::after {
-        content: " ";
-        position: absolute;
-        top: -5px;
-        left: 15px;
-        width: 10px;
-        height: 10px;
-        transform: rotate(135deg);
-        color: white;
-        background: teal;
-        z-index: 1;
-    }
-
     .t-other {
         color: lavender;
     }
@@ -65,7 +52,6 @@
 
     @import "./head-template.scss";
     @import "./foot-template.scss";
-
     @import "./views/days-template.scss";
     @import "./views/weeks-template.scss";
     @import "./views/months-template.scss";

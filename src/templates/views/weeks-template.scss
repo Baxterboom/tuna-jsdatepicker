@@ -1,14 +1,15 @@
 .t-weeks {
     .t-body {
         .t-week {
-            &.active {
-                @include item(true, true);
+            @include item(true, true);
 
+
+            &.active,
+            &:hover {
                 .t-week {
                     position: relative;
                     background: white;
-                    color: teal;
-                    font-weight: bold;
+                    color: $bg-color;
 
                     &::after {
                         content: " ";
@@ -21,6 +22,10 @@
                         @extend %head-color;
                     }
                 }
+            }
+
+            .t-week {
+                font-weight: bold;
             }
 
             .t-item {

@@ -6,15 +6,15 @@ module JSDatepicker {
     export interface IDateRange extends IRange<moment.Moment> { }
 
     export interface IOptions {
-        view: string;
+        view: view;
         views: view[],
         date?: string | moment.Moment | Date;
         dateFormat?: string
         inputFormat?: string;
         showToday: boolean;
         showNavigator: boolean;
+        placement?: JQuery;
 
-        placement?: ((datepicker: DatePicker) => JQuery) | JQuery;
         onChange?: (date: moment.Moment, element: JQuery) => void;
     }
 
@@ -61,19 +61,31 @@ module JSDatepicker {
             showNavigator: false
         };
 
-        constructor(target: any, public options: IOptions) {
+        constructor(target: JQuery, public options: IOptions) {
             this.options = $.extend(DatePicker.options, this.options);
             this.date = moment(this.options.date);
             this.view = this.options.view as view || "days";
 
+            this.input = $(target);
             this.element = templates.parse(templates.main, this);
 
-            this.input = $(target);
+            this.setupViews();
+            this.setupElements();
+        };
+
+        setupElements() {
             this.input.after(this.element);
             this.input.addClass("t-input");
             this.input.on("click", () => this.toggle());
             this.element.append(this.input);
-        };
+        }
+
+        setupViews() {
+            const options = this.options;
+            if (options.views.indexOf(options.view) < 0) {
+                options.views.unshift(options.view); //if view is missing, add as start view
+            }
+        }
 
         go(nav: navigation) {
             const views = this.options.views;
@@ -112,7 +124,7 @@ module JSDatepicker {
         place(placement: JQuery) {
             if (!this.picker) return;
             const offset = this.input.offset();
-            const dimensions = this.input.outerHeight() || 0;
+            const dimensions = (this.input.outerHeight() || 0) + 4;
 
             if (offset && !this.picker.closest(this.element).length) {
                 this.picker.css({ top: offset.top + dimensions, left: offset.left });
@@ -121,21 +133,15 @@ module JSDatepicker {
         }
 
         render() {
-            let target: any = this.options.placement
-                ? $(this.options.placement)
-                : this.element;
-
+            let target = this.options.placement ? $(this.options.placement) : this.element;
             if (!target.length) target = this.element;
-            if (this.options.placement instanceof Function) {
-                target = this.options.placement(this);
-            }
 
             this.close();
 
             this.picker = templates.mount(templates.picker, this, target);
             this.picker.find(".t-item").on("click", () => {
                 this.notifyChange();
-                this.go(navigation.back);
+                if (!this.isCurrentView()) this.go(navigation.back);
             });
 
             this.place(target);
@@ -143,11 +149,16 @@ module JSDatepicker {
             return this.picker;
         }
 
+        isCurrentView(view?: view) {
+            return this.view = view || this.options.view;
+        }
+
         notifyChange() {
             const date = this.date;
             if (this.view === this.options.view) {
                 this.options.date = date;
                 this.input.val(moment(date).format(this.options.inputFormat));
+                this.input.focus();
                 if (this.options.onChange) this.options.onChange(this.date, this.input);
                 this.close();
             }

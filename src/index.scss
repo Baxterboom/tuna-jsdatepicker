@@ -1,16 +1,21 @@
-%hover {
+$bg-color: teal;
+
+%head-color {
     color: white !important;
-    opacity: 0.2;
-    background: teal;
+    background: $bg-color;
+}
+
+%hover {
+    @extend %head-color;
+    opacity: 0.4;
 }
 
 %active {
-    color: white;
-    background-color: teal;
+    @extend %head-color;
 }
 
 %today {
-    border: 1px solid teal;
+    border: 1px solid $bg-color;
     border-radius: 25px;
     background: none;
 }
@@ -29,11 +34,6 @@
             @extend %hover;
         }
     }
-}
-
-%head-color {
-    color: white;
-    background: teal;
 }
 
 @import "./templates/picker-template.scss";

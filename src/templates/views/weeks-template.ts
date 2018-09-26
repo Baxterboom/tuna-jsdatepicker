@@ -76,7 +76,6 @@ module JSDatepicker.templates {
                 const target = $(e.target);
                 const value = target.attr("data-date");
                 instance.date = moment(value).startOf("isoWeek");
-                instance.render();
             });
         }
     }
