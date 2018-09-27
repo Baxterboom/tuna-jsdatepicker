@@ -1,5 +1,7 @@
-$top-color: teal;
-$sub-color: white;
+$res: "./res" !default;
+$theme: "" !default;
+$top-color: teal !default;
+$sub-color: white !default;
 
 %head-color {
     color: $sub-color !important;
@@ -56,7 +58,7 @@ $sub-color: white;
 
             width: 15px;
             height: 15px;
-            background-image: url(./res/picker.svg);
+            background-image: url("#{$res}/picker.svg");
             background-size: cover;
         }
     }

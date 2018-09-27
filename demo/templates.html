@@ -10,15 +10,15 @@
     <script src="/node_modules/tuna-jstemplate/dist/tuna-jstemplate.js"></script>
 
     <link rel="stylesheet" href="./index.css">
-    <link rel="stylesheet" href="./dist/tuna-jsdatepicker.css">
+    <link rel="stylesheet" href="./dist/tuna-jsdatepicker.css" id="default">
     <script src="./dist/tuna-jsdatepicker.js"></script>
     <title>Document</title>
     <script>
         function onload() {
-            render();
+            renderViews();
         }
 
-        function render() {
+        function renderViews() {
             const parent = $("#templates");
             const datepicker = new JSDatepicker.create($("#templates1"), {
                 date: moment(),
@@ -62,6 +62,7 @@
 
 <body onload="onload()">
     <h1>Tuna JSDatepicker</h1> >> <a href="index.html">view demo</a>
+    <div id="themes"></div>
     <div id="templates" class="t-jsdatepicker-picker"></div>
 </body>
 
