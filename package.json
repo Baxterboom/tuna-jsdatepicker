@@ -20,9 +20,11 @@
     "@types/jquery": "3.3.9",
     "browser-sync": "2.24.7",
     "gulp": "3.9.1",
+    "gulp-concat": "^2.6.1",
     "gulp-rename": "1.4.0",
     "gulp-sass": "4.0.1",
     "gulp-typescript": "5.0.0-alpha.3",
+    "gulp-uglify": "^3.0.1",
     "jquery": "3.3.1",
     "typescript": "3.0.3"
   },

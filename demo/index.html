@@ -17,14 +17,14 @@
 
         function onload() {
 
-            JSDatepicker.create("#days", { 
+            JSDatepicker.create("#days", {
                 date: moment(),
                 views: ["weeks", "years", "decades"],
                 view: "days",
                 placement: "#placement"
             });
 
-            JSDatepicker.create("#weeks", { 
+            JSDatepicker.create("#weeks", {
                 date: moment(),
                 views: ["months", "years", "decades"],
                 view: "weeks",
@@ -32,7 +32,7 @@
                 placement: "#placement"
             });
 
-            JSDatepicker.create("#months", { 
+            JSDatepicker.create("#months", {
                 date: moment(),
                 views: ["weeks", "years", "decades"],
                 view: "months",
@@ -40,7 +40,7 @@
                 placement: "#placement"
             });
 
-            JSDatepicker.create("#years", { 
+            JSDatepicker.create("#years", {
                 date: moment(),
                 views: ["weeks", "months", "decades"],
                 view: "years",
@@ -48,9 +48,9 @@
                 placement: "#placement"
             });
 
-            JSDatepicker.create("#decades", { 
+            JSDatepicker.create("#decades", {
                 date: moment(),
-                views: ["weeks", "months",  "years"],
+                views: ["weeks", "months", "years"],
                 view: "decades",
                 placement: "#placement"
             });
@@ -67,7 +67,8 @@
 </head>
 
 <body onload="onload()">
-    <h1>Tuna JSDatepicker</h1> >> <a href="templates.html">view templates</a>
+    <h1><a href="https://github.com/Baxterboom/tuna-jsdatepicker" target="blank">Tuna JSDatepicker</a></h1> >> <a href="templates.html">view
+        templates</a>
     <div id="demo">
         <input type="text" id="days" placeholder="days">
         <input type="text" id="weeks" placeholder="weeks">

@@ -1,5 +1,7 @@
 const gulp = require("gulp");
 const sass = require("gulp-sass");
+const concat = require('gulp-concat');
+const uglify = require('gulp-uglify');
 const rename = require("gulp-rename");
 
 const b = require("browser-sync").create();
@@ -14,7 +16,7 @@ tasks - main
 */
 
 gulp.task("dev", ["watch"]);
-gulp.task("build", ["sass", "ts"]);
+gulp.task("build", ["sass", "ts", "minify"]);
 gulp.task("default", ["dev"]);
 
 /*
@@ -37,6 +39,18 @@ gulp.task("sass", function () {
     .on('error', e => console.error(e))
     .pipe(rename("tuna-jsdatepicker.css"))
     .pipe(gulp.dest("./dist"));
+});
+
+gulp.task("minify", function () {
+  return gulp.src([
+      './node_modules/tuna-jstemplate/dist/tuna-jstemplate.js',
+      './dist/tuna-jsdatepicker.js'
+    ])
+    .pipe(concat('tuna-jsdatepicker.bundled.js'))
+    .pipe(gulp.dest('./dist'))
+    .pipe(rename('tuna-jsdatepicker.bundled.min.js'))
+    .pipe(uglify())
+    .pipe(gulp.dest('./dist'));
 });
 
 gulp.task("watch", ["ts", "sass", "browsersync"], function () {
