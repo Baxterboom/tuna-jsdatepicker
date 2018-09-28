@@ -75,6 +75,7 @@ module JSDatepicker {
             this.placment = $(this.options.placement || this.element);
 
             this.setupViews();
+            this.setupInput();
             this.setupElements();
         };
 
@@ -83,6 +84,19 @@ module JSDatepicker {
             this.input.addClass("t-input");
             this.element.append(this.input);
             this.trigger.on("click", () => this.toggle());
+        }
+
+        setupInput() {
+            this.input.on("keydown", (e) => {
+                const char = e.which || e.keyCode;
+                switch (char) {
+                    case 9:
+                    case 13:
+                        const format = this.options.inputFormat;
+                        this.date = moment(this.input.val(), format);
+                        return this.invokeOnChange();
+                }
+            });
         }
 
         setupViews() {

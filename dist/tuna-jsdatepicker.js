@@ -25,6 +25,7 @@ var JSDatepicker;
             this.trigger = this.element.find(".t-trigger");
             this.placment = $(this.options.placement || this.element);
             this.setupViews();
+            this.setupInput();
             this.setupElements();
         }
         ;
@@ -34,6 +35,19 @@ var JSDatepicker;
             this.input.addClass("t-input");
             this.element.append(this.input);
             this.trigger.on("click", function () { return _this.toggle(); });
+        };
+        DatePicker.prototype.setupInput = function () {
+            var _this = this;
+            this.input.on("keydown", function (e) {
+                var char = e.which || e.keyCode;
+                switch (char) {
+                    case 9:
+                    case 13:
+                        var format = _this.options.inputFormat;
+                        _this.date = moment(_this.input.val(), format);
+                        return _this.invokeOnChange();
+                }
+            });
         };
         DatePicker.prototype.setupViews = function () {
             var options = this.options;
