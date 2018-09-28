@@ -1,12 +1,6 @@
 "use strict";
 var JSDatepicker;
 (function (JSDatepicker) {
-    var navigation;
-    (function (navigation) {
-        navigation[navigation["back"] = 0] = "back";
-        navigation[navigation["forward"] = 1] = "forward";
-    })(navigation = JSDatepicker.navigation || (JSDatepicker.navigation = {}));
-    ;
     function registerOutsideClickEventHandler(selector, callback) {
         var outsideClickListener = function (event) {
             var inside = $(event.target).closest(selector).length;
@@ -22,9 +16,8 @@ var JSDatepicker;
     JSDatepicker.registerOutsideClickEventHandler = registerOutsideClickEventHandler;
     var DatePicker = /** @class */ (function () {
         function DatePicker(target, options) {
-            this.options = options;
             this.cancelOutsideClickEventHandler = function () { };
-            this.options = $.extend({}, DatePicker.options, this.options);
+            this.options = $.extend({}, DatePicker.options, options);
             this.date = moment(this.options.date);
             this.view = this.options.view || "days";
             this.input = $(target);
@@ -48,10 +41,10 @@ var JSDatepicker;
                 options.views.unshift(options.view); //if view is missing, add as start view
             }
         };
-        DatePicker.prototype.go = function (nav) {
+        DatePicker.prototype.navigate = function (nav) {
             var views = this.options.views;
             var index = views.indexOf(this.view);
-            index += nav == navigation.forward ? 1 : -1;
+            index += nav == "up" ? 1 : -1;
             this.view = views[index] || this.options.view;
             this.render();
         };
@@ -94,13 +87,14 @@ var JSDatepicker;
         DatePicker.prototype.render = function () {
             var _this = this;
             this.remove();
+            JSDatepicker.templates.showDebugger(this);
             this.picker = JSDatepicker.templates.mount(JSDatepicker.templates.picker, this, this.placment);
             this.picker.find(".t-item").on("click", function () {
                 _this.notifyChange();
-                _this.go(navigation.back);
+                _this.navigate("down");
             });
             this.place();
-            return this.picker;
+            console.log(new Error().stack);
         };
         DatePicker.prototype.notifyChange = function () {
             var date = this.date;
@@ -151,6 +145,58 @@ var JSDatepicker;
 (function (JSDatepicker) {
     var templates;
     (function (templates) {
+        templates.debug = {
+            config: {
+                name: "debug"
+            },
+            template: "\n          <div class=\"t-debug\">\n            <textarea style=\"width:100%;height:400px\";></textarea>\n          </div>",
+            onMounted: function (instance, element) {
+                $(".t-debug textarea").val(JSDatepicker.templates.json(instance, undefined, 4) +
+                    JSDatepicker.templates.json(instance.options, undefined, 4));
+            }
+        };
+        function showDebugger(instance) {
+            $(".t-debug").remove();
+            templates.mount(templates.debug, instance, instance.placment);
+        }
+        templates.showDebugger = showDebugger;
+        function json(obj, replacer, indent) {
+            var keys = [];
+            var items = [];
+            function replacerTransformer(key, value) {
+                if (items.length > 2000) { // browsers will not print more than 20K, I don't see the point to allow 2K.. algorithm will not be fast anyway if we have too many objects
+                    return 'object too long';
+                }
+                var index = 0;
+                items.forEach(function (o, i) {
+                    if (o === value)
+                        index = i;
+                });
+                if (key == '') { //root element
+                    items.push(obj);
+                    keys.push("root");
+                    return value;
+                }
+                if (index + "" != "false" && typeof (value) == "object") {
+                    return (keys[index] == "root")
+                        ? "#pointer to root"
+                        : "#see " + ((!!value && !!value.constructor) ? value.constructor.name.toLowerCase() : typeof (value)) + " with key " + keys[index];
+                }
+                var qualifiedKey = key || "#empty key";
+                items.push(value);
+                keys.push(qualifiedKey);
+                return replacer ? replacer(key, value) : value;
+            }
+            return JSON.stringify(obj, replacerTransformer, indent);
+        }
+        templates.json = json;
+        ;
+    })(templates = JSDatepicker.templates || (JSDatepicker.templates = {}));
+})(JSDatepicker || (JSDatepicker = {}));
+var JSDatepicker;
+(function (JSDatepicker) {
+    var templates;
+    (function (templates) {
         templates.foot = {
             config: {
                 name: "foot"
@@ -190,7 +236,7 @@ var JSDatepicker;
                     instance.step(_this.config, b.hasClass("t-next"));
                 });
                 element.find("button.t-title").on("click", function (e) {
-                    instance.go(JSDatepicker.navigation.forward);
+                    instance.navigate("up");
                 });
             }
         };
@@ -373,4 +419,36 @@ var JSDatepicker;
             }
         };
     })(templates = JSDatepicker.templates || (JSDatepicker.templates = {}));
+})(JSDatepicker || (JSDatepicker = {}));
+var JSDatepicker;
+(function (JSDatepicker) {
+    function timeout(action, delay) {
+        return new Timeout(action, delay);
+    }
+    JSDatepicker.timeout = timeout;
+    var Timeout = /** @class */ (function () {
+        function Timeout(action, delay) {
+            var _this = this;
+            this.action = action;
+            this.id = 0;
+            this.cancel();
+            // @ts-ignore
+            Timeout.current[this.action] = this;
+            this.id = setTimeout(function () {
+                _this.action();
+                _this.cancel();
+            }, delay);
+        }
+        Timeout.prototype.cancel = function () {
+            // @ts-ignore
+            var existing = Timeout.current[this.action];
+            if (existing) {
+                clearTimeout(existing.id);
+                // @ts-ignore
+                delete Timeout.current[this.action];
+            }
+        };
+        Timeout.current = {};
+        return Timeout;
+    }());
 })(JSDatepicker || (JSDatepicker = {}));

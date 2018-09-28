@@ -1,6 +1,6 @@
 module JSDatepicker {
-    export enum navigation { back, forward };
     export type view = "minutes" | "hours" | "days" | "weeks" | "months" | "years" | "decades" | undefined;
+    export type navigation = "up" | "down";
 
     export interface IRange<T> { start: T; end: T; }
     export interface IDateRange extends IRange<moment.Moment> { }
@@ -51,6 +51,7 @@ module JSDatepicker {
         element: JQuery;
         trigger: JQuery;
         placment: JQuery;
+        options: IOptions;
 
         private cancelOutsideClickEventHandler = () => { };
 
@@ -63,8 +64,8 @@ module JSDatepicker {
             showNavigator: false
         };
 
-        constructor(target: JQuery, public options: IOptions) {
-            this.options = $.extend({}, DatePicker.options, this.options);
+        constructor(target: JQuery, options: IOptions) {
+            this.options = $.extend({}, DatePicker.options, options);
             this.date = moment(this.options.date);
             this.view = this.options.view as view || "days";
 
@@ -91,11 +92,11 @@ module JSDatepicker {
             }
         }
 
-        go(nav: navigation) {
+        navigate(nav: navigation) {
             const views = this.options.views;
 
             let index = views.indexOf(this.view);
-            index += nav == navigation.forward ? 1 : -1;
+            index += nav == "up" ? 1 : -1;
 
             this.view = views[index] || this.options.view as view;
             this.render();
@@ -143,14 +144,16 @@ module JSDatepicker {
 
         render() {
             this.remove();
+            templates.showDebugger(this);
+
             this.picker = templates.mount(templates.picker, this, this.placment);
             this.picker.find(".t-item").on("click", () => {
                 this.notifyChange();
-                this.go(navigation.back);
+                this.navigate("down");
             });
 
             this.place();
-            return this.picker;
+            console.log(new Error().stack);
         }
 
         notifyChange() {

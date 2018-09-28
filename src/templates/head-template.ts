@@ -22,7 +22,7 @@ module JSDatepicker.templates {
             });
 
             element.find("button.t-title").on("click", (e) => {
-                instance.go(navigation.forward);
+                instance.navigate("up");
             });
         }
     }
