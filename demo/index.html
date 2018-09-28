@@ -19,7 +19,7 @@
 
             JSDatepicker.create("#days", {
                 date: moment(),
-                views: ["weeks", "years", "decades"],
+                views: ["months", "years", "decades"],
                 view: "days",
                 placement: "#placement"
             });
@@ -28,7 +28,7 @@
                 date: moment(),
                 views: ["months", "years", "decades"],
                 view: "weeks",
-                inputFormat: "w MMMM YYYY",
+                inputFormat: "[w]w [-] MMMM YYYY",
                 placement: "#placement"
             });
 
@@ -44,7 +44,7 @@
                 date: moment(),
                 views: ["weeks", "months", "decades"],
                 view: "years",
-                inputFormat: "YYYY MMMM DD",
+                inputFormat: "YYYY",
                 placement: "#placement"
             });
 

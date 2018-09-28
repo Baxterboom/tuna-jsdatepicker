@@ -9,11 +9,11 @@ module JSDatepicker {
         view: view;
         views: view[],
         date?: string | moment.Moment | Date;
-        dateFormat?: string
         inputFormat?: string;
+        placement?: JQuery;
+        ranges: IRange<moment.Moment>[]
         showToday: boolean;
         showNavigator: boolean;
-        placement?: JQuery;
 
         onChange?: (date: moment.Moment, element: JQuery) => void;
     }
@@ -58,7 +58,7 @@ module JSDatepicker {
         static options: IOptions = {
             view: "days",
             views: ["days", "months", "years", "decades"],
-            dateFormat: moment.localeData().longDateFormat("L"),
+            ranges: [],
             inputFormat: moment.localeData().longDateFormat("L"),
             showToday: true,
             showNavigator: false

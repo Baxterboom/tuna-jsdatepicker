@@ -125,7 +125,7 @@ var JSDatepicker;
         DatePicker.options = {
             view: "days",
             views: ["days", "months", "years", "decades"],
-            dateFormat: moment.localeData().longDateFormat("L"),
+            ranges: [],
             inputFormat: moment.localeData().longDateFormat("L"),
             showToday: true,
             showNavigator: false
@@ -169,9 +169,11 @@ var JSDatepicker;
                 element.find("button.t-today").on("click", function (e) {
                     instance.view = instance.options.view;
                     instance.date = moment();
+                    instance.render();
                 });
                 element.find(".t-view").on("change", function (e) {
                     instance.view = $(e.target).val();
+                    instance.render();
                 });
             }
         };

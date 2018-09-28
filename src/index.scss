@@ -2,7 +2,6 @@ $res: "./res" !default;
 $theme: "" !default;
 $top-color: teal !default;
 $sub-color: white !default;
-
 %head-color {
     color: $sub-color !important;
     background: $top-color;
@@ -29,10 +28,8 @@ $sub-color: white !default;
             @extend %active;
         }
     }
-
     @if ($hover) {
         cursor: pointer;
-
         &:hover {
             @extend %hover;
         }
@@ -40,33 +37,27 @@ $sub-color: white !default;
 }
 
 @import "./templates/picker-template.scss";
-
 .t-jsdatepicker {
     position: relative;
     display: flex;
     flex-direction: row-reverse;
     align-items: center;
-
     .t-trigger {
         cursor: pointer;
         position: absolute;
         padding-right: 10px;
-
         &::before {
             content: "";
             display: block;
-
             width: 15px;
             height: 15px;
             background-image: url("#{$res}/picker.svg");
             background-size: cover;
         }
     }
-
     .t-hidden {
         display: none !important;
     }
-
     .t-input {
         flex-grow: 1;
         padding-right: 25px;
