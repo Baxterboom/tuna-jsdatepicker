@@ -55,7 +55,6 @@ module JSDatepicker.templates {
                 const target = $(e.target);
                 const value = parseInt(target.text());
                 instance.date.year(value);
-                instance.render();
             });
         }
     }

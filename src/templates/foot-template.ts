@@ -26,12 +26,10 @@ module JSDatepicker.templates {
             element.find("button.t-today").on("click", (e) => {
                 instance.view = instance.options.view as view;
                 instance.date = moment();
-                instance.render();
             });
 
             element.find(".t-view").on("change", (e) => {
                 instance.view = $(e.target).val() as view;
-                instance.render();
             });
         }
     }

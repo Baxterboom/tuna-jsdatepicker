@@ -61,7 +61,6 @@ module JSDatepicker.templates {
                 });
 
                 instance.date.year(value / 2);
-                instance.render();
             });
         }
     }

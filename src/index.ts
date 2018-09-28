@@ -144,29 +144,28 @@ module JSDatepicker {
 
         render() {
             this.remove();
-            templates.showDebugger(this);
 
             this.picker = templates.mount(templates.picker, this, this.placment);
             this.picker.find(".t-item").on("click", () => {
-                this.notifyChange();
-                this.navigate("down");
+                if (!this.invokeOnChange()) this.navigate("down");
             });
 
             this.place();
-            console.log(new Error().stack);
+            return this.picker;
         }
 
-        notifyChange() {
+        invokeOnChange() {
             const date = this.date;
-            if (this.view === this.options.view) {
+            const options = this.options;
+            if (this.view != options.view) return false;
 
-                this.input.val(moment(date).format(this.options.inputFormat));
-                this.input.focus();
-                this.options.date = date;
-                this.close();
+            options.date = date;
+            this.input.val(moment(date).format(options.inputFormat));
+            this.input.focus();
+            this.close();
 
-                if (this.options.onChange) this.options.onChange(this.date, this.input);
-            }
+            if (options.onChange) options.onChange(this.date, this.input);
+            return true;
         }
     }
 

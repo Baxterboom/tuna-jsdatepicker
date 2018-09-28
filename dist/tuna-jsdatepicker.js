@@ -87,25 +87,26 @@ var JSDatepicker;
         DatePicker.prototype.render = function () {
             var _this = this;
             this.remove();
-            JSDatepicker.templates.showDebugger(this);
             this.picker = JSDatepicker.templates.mount(JSDatepicker.templates.picker, this, this.placment);
             this.picker.find(".t-item").on("click", function () {
-                _this.notifyChange();
-                _this.navigate("down");
+                if (!_this.invokeOnChange())
+                    _this.navigate("down");
             });
             this.place();
-            console.log(new Error().stack);
+            return this.picker;
         };
-        DatePicker.prototype.notifyChange = function () {
+        DatePicker.prototype.invokeOnChange = function () {
             var date = this.date;
-            if (this.view === this.options.view) {
-                this.input.val(moment(date).format(this.options.inputFormat));
-                this.input.focus();
-                this.options.date = date;
-                this.close();
-                if (this.options.onChange)
-                    this.options.onChange(this.date, this.input);
-            }
+            var options = this.options;
+            if (this.view != options.view)
+                return false;
+            options.date = date;
+            this.input.val(moment(date).format(options.inputFormat));
+            this.input.focus();
+            this.close();
+            if (options.onChange)
+                options.onChange(this.date, this.input);
+            return true;
         };
         DatePicker.options = {
             view: "days",
@@ -141,6 +142,16 @@ var JSDatepicker;
         templates.mount = mount;
     })(templates = JSDatepicker.templates || (JSDatepicker.templates = {}));
 })(JSDatepicker || (JSDatepicker = {}));
+var fnRender = JSDatepicker.DatePicker.prototype.render;
+JSDatepicker.DatePicker.prototype.render = function () {
+    console.time("render");
+    $(".t-debug").remove();
+    JSDatepicker.templates.mount(JSDatepicker.templates.debug, this, this.placment);
+    console.log(new Error().stack);
+    var result = fnRender.call(this);
+    console.timeEnd("render");
+    return result;
+};
 var JSDatepicker;
 (function (JSDatepicker) {
     var templates;
@@ -155,11 +166,6 @@ var JSDatepicker;
                     JSDatepicker.templates.json(instance.options, undefined, 4));
             }
         };
-        function showDebugger(instance) {
-            $(".t-debug").remove();
-            templates.mount(templates.debug, instance, instance.placment);
-        }
-        templates.showDebugger = showDebugger;
         function json(obj, replacer, indent) {
             var keys = [];
             var items = [];
@@ -206,11 +212,9 @@ var JSDatepicker;
                 element.find("button.t-today").on("click", function (e) {
                     instance.view = instance.options.view;
                     instance.date = moment();
-                    instance.render();
                 });
                 element.find(".t-view").on("change", function (e) {
                     instance.view = $(e.target).val();
-                    instance.render();
                 });
             }
         };
@@ -296,7 +300,6 @@ var JSDatepicker;
                     var target = $(e.target);
                     var value = target.attr("data-date");
                     instance.date = moment(value);
-                    instance.render();
                 });
             }
         };
@@ -333,7 +336,6 @@ var JSDatepicker;
                         value += parseInt(item);
                     });
                     instance.date.year(value / 2);
-                    instance.render();
                 });
             }
         };
@@ -356,7 +358,6 @@ var JSDatepicker;
                     var target = $(e.target);
                     var value = target.index();
                     instance.date.month(value);
-                    instance.render();
                 });
             }
         };
@@ -414,7 +415,6 @@ var JSDatepicker;
                     var target = $(e.target);
                     var value = parseInt(target.text());
                     instance.date.year(value);
-                    instance.render();
                 });
             }
         };

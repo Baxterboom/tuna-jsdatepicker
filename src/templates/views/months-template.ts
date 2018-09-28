@@ -35,7 +35,6 @@ module JSDatepicker.templates {
                 const target = $(e.target);
                 const value = target.index();
                 instance.date.month(value);
-                instance.render();
             });
         }
     }
