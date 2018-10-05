@@ -2,13 +2,16 @@ module JSDatepicker {
     export type view = "minutes" | "hours" | "days" | "weeks" | "months" | "years" | "decades" | undefined;
     export type navigation = "up" | "down";
 
-    export interface IRange<T> { start: T; end: T; }
-    export interface IDateRange extends IRange<moment.Moment> { }
+    export interface IRange<T> { from: T; to: T; }
+    export interface IDateRange extends IRange<moment.Moment> {
+        selectable: boolean;
+    }
 
     export interface IOptions {
         view: view;
         views: view[],
         date?: string | moment.Moment | Date;
+        ranges?: IDateRange[];
         inputFormat?: string;
         placement?: JQuery;
         showToday: boolean;
@@ -54,13 +57,14 @@ module JSDatepicker {
 
         private cancelOutsideClickEventHandler = () => { };
 
-        static options: IOptions = {
+        static options = Object.freeze<IOptions>({
             view: "days",
             views: ["days", "months", "years", "decades"],
+            ranges: [],
             inputFormat: moment.localeData().longDateFormat("L"),
             showToday: true,
             showNavigator: false
-        };
+        });
 
         constructor(target: JQuery, options: IOptions) {
             this.options = $.extend({}, DatePicker.options, options);
@@ -179,6 +183,17 @@ module JSDatepicker {
             if (options.onChange) options.onChange(this.date, this.input);
             return true;
         }
+
+        isSelectable(date: moment.Moment) {
+            const ranges = this.options.ranges || [];
+            for (var i = 0; i < ranges.length; i++) {
+                const r = ranges[i];
+                if (date.isBetween(r.from || moment.min, r.to || moment.max, "day", "[]")) {
+                    return r.selectable;
+                }
+            }
+            return true;
+        }
     }
 
     export function create(target: any, options: IOptions) {
@@ -187,6 +202,7 @@ module JSDatepicker {
 }
 
 module JSDatepicker.templates {
+
     export function parse(template: ITemplate, instance: DatePicker) {
         const data = $.extend({}, instance, { template });
         return $(JSTemplate.parse(template.template, data, true));

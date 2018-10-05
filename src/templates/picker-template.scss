@@ -23,6 +23,12 @@
     .t-today {
         @extend %today;
     }
+    .disabled {
+        color: silver;
+        cursor: not-allowed;
+        border-radius: 0;
+        background: whitesmoke;
+    }
     .active {
         @extend %active;
     }

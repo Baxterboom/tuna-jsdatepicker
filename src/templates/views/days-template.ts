@@ -50,6 +50,7 @@ module JSDatepicker.templates {
                             classes: ["t-item", "t-event", "t-day"]
                         };
 
+                        if(!isSelectable(t.current)) item.classes.push("disabled");
                         if(t.current.isSame(t.date, "day")) item.classes.push("active");
                         if(t.current.isSame(t.today, "day")) item.classes.push("t-today");
                         if(!t.current.isSame(date, "month")) item.classes.push("t-other");
