@@ -103,7 +103,7 @@ var JSDatepicker;
             var _this = this;
             this.remove();
             this.picker = JSDatepicker.templates.mount(JSDatepicker.templates.picker, this, this.placment);
-            this.picker.find(".t-item").on("click", function () {
+            this.picker.find(".t-event").on("click", function () {
                 if (!_this.invokeOnChange())
                     _this.navigate("down");
             });
@@ -126,7 +126,6 @@ var JSDatepicker;
         DatePicker.options = {
             view: "days",
             views: ["days", "months", "years", "decades"],
-            dateFormat: moment.localeData().longDateFormat("L"),
             inputFormat: moment.localeData().longDateFormat("L"),
             showToday: true,
             showNavigator: false
@@ -157,63 +156,6 @@ var JSDatepicker;
         templates.mount = mount;
     })(templates = JSDatepicker.templates || (JSDatepicker.templates = {}));
 })(JSDatepicker || (JSDatepicker = {}));
-var fnRender = JSDatepicker.DatePicker.prototype.render;
-JSDatepicker.DatePicker.prototype.render = function () {
-    console.time("render");
-    $(".t-debug").remove();
-    JSDatepicker.templates.mount(JSDatepicker.templates.debug, this, this.placment);
-    console.log(new Error().stack);
-    var result = fnRender.call(this);
-    console.timeEnd("render");
-    return result;
-};
-var JSDatepicker;
-(function (JSDatepicker) {
-    var templates;
-    (function (templates) {
-        templates.debug = {
-            config: {
-                name: "debug"
-            },
-            template: "\n          <div class=\"t-debug\">\n            <textarea style=\"width:100%;height:400px\";></textarea>\n          </div>",
-            onMounted: function (instance, element) {
-                $(".t-debug textarea").val(JSDatepicker.templates.json(instance, undefined, 4) +
-                    JSDatepicker.templates.json(instance.options, undefined, 4));
-            }
-        };
-        function json(obj, replacer, indent) {
-            var keys = [];
-            var items = [];
-            function replacerTransformer(key, value) {
-                if (items.length > 2000) { // browsers will not print more than 20K, I don't see the point to allow 2K.. algorithm will not be fast anyway if we have too many objects
-                    return 'object too long';
-                }
-                var index = 0;
-                items.forEach(function (o, i) {
-                    if (o === value)
-                        index = i;
-                });
-                if (key == '') { //root element
-                    items.push(obj);
-                    keys.push("root");
-                    return value;
-                }
-                if (index + "" != "false" && typeof (value) == "object") {
-                    return (keys[index] == "root")
-                        ? "#pointer to root"
-                        : "#see " + ((!!value && !!value.constructor) ? value.constructor.name.toLowerCase() : typeof (value)) + " with key " + keys[index];
-                }
-                var qualifiedKey = key || "#empty key";
-                items.push(value);
-                keys.push(qualifiedKey);
-                return replacer ? replacer(key, value) : value;
-            }
-            return JSON.stringify(obj, replacerTransformer, indent);
-        }
-        templates.json = json;
-        ;
-    })(templates = JSDatepicker.templates || (JSDatepicker.templates = {}));
-})(JSDatepicker || (JSDatepicker = {}));
 var JSDatepicker;
 (function (JSDatepicker) {
     var templates;
@@ -222,14 +164,16 @@ var JSDatepicker;
             config: {
                 name: "foot"
             },
-            template: "\n            <div class=\"t-foot\">\n            <%\n                if(options.showToday) w('<button class=\"t-today\">Today</button>');\n\n                if(options.showNavigator) {\n                    var items = \"\";\n\n                    options.views.forEach(function(item) {\n                        const selected = view == item ? \"selected\" : \"\";\n                        items += '<option class=\"t-nav t-view\" <%=selected%>><%=item%></option>';\n                    });  \n                    \n                    w('<select class=\"t-nav t-view\">');\n                    w(items);\n                    w('</select>');\n                }\n            %>\n            </div>",
+            template: "\n            <div class=\"t-foot\">\n            <%\n                if(options.showToday) w('<button class=\"t-nav t-today\">Today</button>');\n\n                if(options.showNavigator) {\n                    var items = \"\";\n\n                    options.views.forEach(function(item) {\n                        const selected = view == item ? \"selected\" : \"\";\n                        items += '<option class=\"t-nav t-view\" <%=selected%>><%=item%></option>';\n                    });  \n                    \n                    w('<select class=\"t-nav t-view\">');\n                    w(items);\n                    w('</select>');\n                }\n            %>\n            </div>",
             onMounted: function (instance, element) {
                 element.find("button.t-today").on("click", function (e) {
                     instance.view = instance.options.view;
                     instance.date = moment();
+                    instance.render();
                 });
                 element.find(".t-view").on("change", function (e) {
                     instance.view = $(e.target).val();
+                    instance.render();
                 });
             }
         };
@@ -269,7 +213,7 @@ var JSDatepicker;
             config: {
                 name: "main"
             },
-            template: "\n            <div class=\"t-jsdatepicker\">\n                <div class=\"t-trigger\"></div>\n            </div>"
+            template: "\n            <div class=\"t-jsdp\">\n                <div class=\"t-trigger\"></div>\n            </div>"
         };
     })(templates = JSDatepicker.templates || (JSDatepicker.templates = {}));
 })(JSDatepicker || (JSDatepicker = {}));
@@ -281,7 +225,7 @@ var JSDatepicker;
             config: {
                 name: "picker"
             },
-            template: "<div class=\"t-jsdatepicker-picker\"></div>",
+            template: "<div class=\"t-jsdp-picker\"></div>",
             onMounted: function (instance, element) {
                 instance.picker = element; //need to set this here since templates might need it
                 var t = templates;
@@ -308,7 +252,7 @@ var JSDatepicker;
                 headerFormat: "MMMM YYYY",
                 showWeeknumbers: true
             },
-            template: "\n            <%\n                function renderWeekCell(text) {\n                    w(template.config.showWeeknumbers ?'<div class=\"t-item t-week\">'+ text +'</div>' : '');\n                }\n\n                function renderWeekdays() {\n                    renderWeekCell('w');\n\n                    moment.weekdaysMin().forEach(function(f) {\n                        w('<div class=\"t-item t-weekday\">'+ f +'</div>');\n                    });\n                }\n            %>\n            <div class=\"t-days\">\n                <div class=\"t-head\">\n                    <div class=\"t-week\">\n                    <%\n                        renderWeekdays();\n                    %>\n                    </div>\n                </div>\n                <div class=\"t-body\">\n                <% \n                    var t = {\n                        date: options.date,\n                        end: moment(date).endOf(\"month\").endOf(\"isoWeek\"),\n                        start: moment(date).startOf(\"month\").startOf(\"isoWeek\"),\n                        week: null,\n                        today: moment(),\n                        current: null\n                    };\n\n                    t.current = moment(t.start);\n\n                    while(t.current < t.end) {\n                        if(t.week != t.current.isoWeek()) {\n                            if(t.week) w('</div>');\n                            w('<div class=\"t-week\">');\n                            \n                            t.week = t.current.isoWeek();\n                            renderWeekCell(t.week);\n                        }\n                        \n                        var item = {\n                            value: t.current.date(),\n                            classes: [\"t-item\", \"t-day\"]\n                        };\n\n                        if(t.current.isSame(t.date, \"day\")) item.classes.push(\"active\");\n                        if(t.current.isSame(t.today, \"day\")) item.classes.push(\"t-today\");\n                        if(!t.current.isSame(date, \"month\")) item.classes.push(\"t-other\");\n                        w('<div class=\"<%=item.classes.join(\" \")%>\" data-date=\"<%=t.current.format('YYYY-MM-DD')%>\"><%=item.value%></div>');\n                        t.current.add(1, \"d\");\n                    }\n                %>\n                </div>\n            </div>",
+            template: "\n            <%\n                function renderWeekCell(text) {\n                    w(template.config.showWeeknumbers ?'<div class=\"t-item t-week\">'+ text +'</div>' : '');\n                }\n\n                function renderWeekdays() {\n                    renderWeekCell('w');\n\n                    moment.weekdaysMin().forEach(function(f) {\n                        w('<div class=\"t-item t-weekday\">'+ f +'</div>');\n                    });\n                }\n            %>\n            <div class=\"t-days\">\n                <div class=\"t-head\">\n                    <div class=\"t-week\">\n                    <%\n                        renderWeekdays();\n                    %>\n                    </div>\n                </div>\n                <div class=\"t-body\">\n                <% \n                    var t = {\n                        date: options.date,\n                        end: moment(date).endOf(\"month\").endOf(\"isoWeek\"),\n                        start: moment(date).startOf(\"month\").startOf(\"isoWeek\"),\n                        week: null,\n                        today: moment(),\n                        current: null\n                    };\n\n                    t.current = moment(t.start);\n\n                    while(t.current < t.end) {\n                        if(t.week != t.current.isoWeek()) {\n                            if(t.week) w('</div>');\n                            w('<div class=\"t-week\">');\n                            \n                            t.week = t.current.isoWeek();\n                            renderWeekCell(t.week);\n                        }\n                        \n                        var item = {\n                            value: t.current.date(),\n                            classes: [\"t-item\", \"t-event\", \"t-day\"]\n                        };\n\n                        if(t.current.isSame(t.date, \"day\")) item.classes.push(\"active\");\n                        if(t.current.isSame(t.today, \"day\")) item.classes.push(\"t-today\");\n                        if(!t.current.isSame(date, \"month\")) item.classes.push(\"t-other\");\n                        w('<div class=\"<%=item.classes.join(\" \")%>\" data-date=\"<%=t.current.format('YYYY-MM-DD')%>\"><%=item.value%></div>');\n                        t.current.add(1, \"d\");\n                    }\n                %>\n                </div>\n            </div>",
             onMounted: function (instance, element) {
                 var items = element.find(".t-body .t-day");
                 items.on("click", function (e) {
@@ -330,7 +274,7 @@ var JSDatepicker;
                 step: { unit: "y", count: 100 },
                 headerFormat: "YYYY"
             },
-            template: "\n            <div class=\"t-decades\">\n            <% \n                var amount = template.config.step.count / 2;\n\n                var t = { \n                    date: options.date,\n                    end: moment(date).add(amount, \"Y\"),\n                    start: moment(date).add(-(amount), \"Y\"),\n                    next: null,\n                    current: null,\n                    today: moment()\n                };\n\n                t.current = moment(t.start);\n\n                while(t.current < t.end) {\n                    var item = {\n                        value: t.current.year(),\n                        classes: [\"t-item\", \"t-decade\"]\n                    };\n\n                    t.next = moment(t.current).add(10, \"y\");\n\n                    if(t.date.isBetween(t.current, t.next, \"Y\", \"[]\")) item.classes.push(\"active\");\n                    if(t.today.isBetween(t.current, t.next, \"Y\", \"[]\")) item.classes.push(\"t-today\");\n                    \n                    w('<div class=\"<%=item.classes.join(\" \")%>\"><%=item.value +' - '+ t.next.year()%></div>');\n                    t.current = t.next.add(1, \"y\");\n                }\n            %>\n            </div>",
+            template: "\n            <div class=\"t-decades\">\n            <% \n                var amount = template.config.step.count / 2;\n\n                var t = { \n                    date: options.date,\n                    end: moment(date).add(amount, \"Y\"),\n                    start: moment(date).add(-(amount), \"Y\"),\n                    next: null,\n                    current: null,\n                    today: moment()\n                };\n\n                t.current = moment(t.start);\n\n                while(t.current < t.end) {\n                    var item = {\n                        value: t.current.year(),\n                        classes: [\"t-item\", \"t-event\", \"t-decade\"]\n                    };\n\n                    t.next = moment(t.current).add(10, \"y\");\n\n                    if(t.date.isBetween(t.current, t.next, \"Y\", \"[]\")) item.classes.push(\"active\");\n                    if(t.today.isBetween(t.current, t.next, \"Y\", \"[]\")) item.classes.push(\"t-today\");\n                    \n                    w('<div class=\"<%=item.classes.join(\" \")%>\"><%=item.value +' - '+ t.next.year()%></div>');\n                    t.current = t.next.add(1, \"y\");\n                }\n            %>\n            </div>",
             onMounted: function (instance, element) {
                 var step = this.config.step;
                 var picker = instance.picker;
@@ -366,7 +310,7 @@ var JSDatepicker;
                 step: { unit: "y", count: 1 },
                 headerFormat: "YYYY"
             },
-            template: "\n            <div class=\"t-months\">\n            <% \n                var t = {\n                    date: options.date,\n                    today: moment(),\n                    current: moment(date).startOf(\"year\")\n                };\n                \n                moment.monthsShort().forEach(function(m) {\n                    var item = {\n                        value: m,\n                        classes: [\"t-item\", \"t-month\"]\n                    };\n\n                    if(t.current.isSame(t.date, \"M\")) item.classes.push(\"active\");\n                    if(t.current.isSame(t.today, \"M\")) item.classes.push(\"t-today\");\n\n                    w('<div class=\"<%=item.classes.join(\" \")%>\"><%=item.value%></div>');\n                    t.current.add(1, \"M\");\n                });\n            %>\n            </div>",
+            template: "\n            <div class=\"t-months\">\n            <% \n                var t = {\n                    date: options.date,\n                    today: moment(),\n                    current: moment(date).startOf(\"year\")\n                };\n                \n                moment.monthsShort().forEach(function(m) {\n                    var item = {\n                        value: m,\n                        classes: [\"t-item\", \"t-event\", \"t-month\"]\n                    };\n\n                    if(t.current.isSame(t.date, \"M\")) item.classes.push(\"active\");\n                    if(t.current.isSame(t.today, \"M\")) item.classes.push(\"t-today\");\n\n                    w('<div class=\"<%=item.classes.join(\" \")%>\"><%=item.value%></div>');\n                    t.current.add(1, \"M\");\n                });\n            %>\n            </div>",
             onMounted: function (instance, element) {
                 var items = element.find(".t-item.t-month");
                 items.on("click", function (e) {
@@ -389,7 +333,7 @@ var JSDatepicker;
                 headerFormat: "MMMM YYYY",
                 showWeeknumbers: true
             },
-            template: "\n            <%\n                function renderWeekCell(text) {\n                    w(template.config.showWeeknumbers ?'<div class=\"t-item t-week\">'+ text +'</div>' : '');\n                }\n\n                function renderWeekdays() {\n                    renderWeekCell('w');\n\n                    moment.weekdaysMin().forEach(function(f) {\n                        w('<div class=\"t-item t-weekday\">'+ f +'</div>');\n                    });\n                }\n            %>\n            <div class=\"t-days t-weeks\">\n                <div class=\"t-head\">\n                    <div class=\"t-week\">\n                    <%\n                        renderWeekdays();\n                    %>\n                    </div>\n                </div>\n                <div class=\"t-body\">\n                <% \n                    var t = {\n                        date: options.date,\n                        end: moment(date).endOf(\"month\").endOf(\"isoWeek\"),\n                        start: moment(date).startOf(\"month\").startOf(\"isoWeek\"),\n                        week: null,\n                        today: moment(),\n                        current: null\n                    };\n\n                    t.current = moment(t.start);\n\n                    while(t.current < t.end) {\n                        if(t.week != t.current.isoWeek()) {\n                            if(t.week) w('</div>');\n\n                            w(t.current.isSame(options.date, \"week\") \n                                ? '<div class=\"t-week active\">'\n                                : '<div class=\"t-week\">'\n                            );\n\n                            t.week = t.current.isoWeek();\n                            renderWeekCell(t.week);\n                        }\n                        \n                        var item = {\n                            value: t.current.date(),\n                            classes: [\"t-item\", \"t-day\"]\n                        };\n\n                        if(t.current.isSame(t.date, \"day\")) item.classes.push(\"active\");\n                        if(t.current.isSame(t.today, \"day\")) item.classes.push(\"t-today\");\n                        if(!t.current.isSame(date, \"month\")) item.classes.push(\"t-other\");\n                        w('<div class=\"<%=item.classes.join(\" \")%>\" data-date=\"<%=t.current.format('YYYY-MM-DD')%>\"><%=item.value%></div>');\n                        t.current.add(1, \"d\");\n                    }\n                %>\n                </div>\n            </div>",
+            template: "\n            <%\n                function renderWeekCell(text) {\n                    w(template.config.showWeeknumbers ?'<div class=\"t-item t-week\">'+ text +'</div>' : '');\n                }\n\n                function renderWeekdays() {\n                    renderWeekCell('w');\n\n                    moment.weekdaysMin().forEach(function(f) {\n                        w('<div class=\"t-item t-weekday\">'+ f +'</div>');\n                    });\n                }\n            %>\n            <div class=\"t-days t-weeks\">\n                <div class=\"t-head\">\n                    <div class=\"t-week\">\n                    <%\n                        renderWeekdays();\n                    %>\n                    </div>\n                </div>\n                <div class=\"t-body\">\n                <% \n                    var t = {\n                        date: options.date,\n                        end: moment(date).endOf(\"month\").endOf(\"isoWeek\"),\n                        start: moment(date).startOf(\"month\").startOf(\"isoWeek\"),\n                        week: null,\n                        today: moment(),\n                        current: null\n                    };\n\n                    t.current = moment(t.start);\n\n                    while(t.current < t.end) {\n                        if(t.week != t.current.isoWeek()) {\n                            if(t.week) w('</div>');\n\n                            w(t.current.isSame(options.date, \"week\") \n                                ? '<div class=\"t-week active\">'\n                                : '<div class=\"t-week\">'\n                            );\n\n                            t.week = t.current.isoWeek();\n                            renderWeekCell(t.week);\n                        }\n                        \n                        var item = {\n                            value: t.current.date(),\n                            classes: [\"t-item\", \"t-event\", \"t-day\"]\n                        };\n\n                        if(t.current.isSame(t.today, \"day\")) item.classes.push(\"t-today\");\n                        if(!t.current.isSame(date, \"month\")) item.classes.push(\"t-other\");\n                        w('<div class=\"<%=item.classes.join(\" \")%>\" data-date=\"<%=t.current.format('YYYY-MM-DD')%>\"><%=item.value%></div>');\n                        t.current.add(1, \"d\");\n                    }\n                %>\n                </div>\n            </div>",
             onMounted: function (instance, element) {
                 var items = element.find(".t-item.t-day");
                 items.on("click", function (e) {
@@ -411,7 +355,7 @@ var JSDatepicker;
                 step: { unit: "y", count: 12 },
                 headerFormat: "YYYY"
             },
-            template: "\n            <div class=\"t-years\">\n            <% \n                var amount = template.config.step.count / 2;\n\n                var t = {\n                    date: options.date,\n                    end: moment(date).add(amount, \"Y\"),\n                    start: moment(date).add(-(amount), \"Y\"),\n                    today: moment(),\n                    current: null\n                };\n\n                t.current = moment(t.start);\n\n                while(t.current < t.end) {\n                    var item = {\n                        value:  t.current.year(), \n                        classes: [\"t-item\", \"t-year\"]\n                    };\n\n                    if(t.current.isSame(t.date, \"d\")) item.classes.push(\"active\");\n                    if(t.current.isSame(t.today, \"Y\")) item.classes.push(\"t-today\");\n\n                    w('<div class=\"<%=item.classes.join(\" \")%>\"><%=item.value%></div>');\n                    t.current.add(1, \"y\");\n                }\n            %>\n            </div>",
+            template: "\n            <div class=\"t-years\">\n            <% \n                var amount = template.config.step.count / 2;\n\n                var t = {\n                    date: options.date,\n                    end: moment(date).add(amount, \"Y\"),\n                    start: moment(date).add(-(amount), \"Y\"),\n                    today: moment(),\n                    current: null\n                };\n\n                t.current = moment(t.start);\n\n                while(t.current < t.end) {\n                    var item = {\n                        value:  t.current.year(), \n                        classes: [\"t-item\", \"t-event\", \"t-year\"]\n                    };\n\n                    if(t.current.isSame(t.date, \"d\")) item.classes.push(\"active\");\n                    if(t.current.isSame(t.today, \"Y\")) item.classes.push(\"t-today\");\n\n                    w('<div class=\"<%=item.classes.join(\" \")%>\"><%=item.value%></div>');\n                    t.current.add(1, \"y\");\n                }\n            %>\n            </div>",
             onMounted: function (instance, element) {
                 var step = this.config.step;
                 var picker = instance.picker;
@@ -434,36 +378,4 @@ var JSDatepicker;
             }
         };
     })(templates = JSDatepicker.templates || (JSDatepicker.templates = {}));
-})(JSDatepicker || (JSDatepicker = {}));
-var JSDatepicker;
-(function (JSDatepicker) {
-    function timeout(action, delay) {
-        return new Timeout(action, delay);
-    }
-    JSDatepicker.timeout = timeout;
-    var Timeout = /** @class */ (function () {
-        function Timeout(action, delay) {
-            var _this = this;
-            this.action = action;
-            this.id = 0;
-            this.cancel();
-            // @ts-ignore
-            Timeout.current[this.action] = this;
-            this.id = setTimeout(function () {
-                _this.action();
-                _this.cancel();
-            }, delay);
-        }
-        Timeout.prototype.cancel = function () {
-            // @ts-ignore
-            var existing = Timeout.current[this.action];
-            if (existing) {
-                clearTimeout(existing.id);
-                // @ts-ignore
-                delete Timeout.current[this.action];
-            }
-        };
-        Timeout.current = {};
-        return Timeout;
-    }());
 })(JSDatepicker || (JSDatepicker = {}));

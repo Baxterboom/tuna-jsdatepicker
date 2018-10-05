@@ -23,7 +23,7 @@ module JSDatepicker.templates {
                 while(t.current < t.end) {
                     var item = {
                         value:  t.current.year(), 
-                        classes: ["t-item", "t-year"]
+                        classes: ["t-item", "t-event", "t-year"]
                     };
 
                     if(t.current.isSame(t.date, "d")) item.classes.push("active");

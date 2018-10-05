@@ -6,7 +6,7 @@ module JSDatepicker.templates {
         template: `
             <div class="t-foot">
             <%
-                if(options.showToday) w('<button class="t-today">Today</button>');
+                if(options.showToday) w('<button class="t-nav t-today">Today</button>');
 
                 if(options.showNavigator) {
                     var items = "";

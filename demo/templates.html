@@ -21,7 +21,7 @@
         function renderViews() {
             const parent = $("#templates");
             const datepicker = new JSDatepicker.create($("#templates1"), {
-                date: moment(),
+                date: moment().add(1, "month"),
                 showToday: true,
                 showNavigator: true
             });
@@ -48,7 +48,7 @@
             margin: 30px;
         }
 
-        #templates .t-jsdatepicker-picker {
+        #templates .t-jsdp-picker {
             display: none;
         }
 
@@ -62,9 +62,10 @@
 
 <body onload="onload()">
 
-    <h1><a href="https://github.com/Baxterboom/tuna-jsdatepicker" target="blank">Tuna JSDatepicker</a></h1> >> <a href="index.html">view demo</a>
+    <h1><a href="https://github.com/Baxterboom/tuna-jsdatepicker" target="blank">Tuna JSDatepicker</a></h1> >> <a href="index.html">view
+        demo</a>
     <div id="themes"></div>
-    <div id="templates" class="t-jsdatepicker-picker"></div>
+    <div id="templates" class="t-jsdp-picker"></div>
 </body>
 
 </html>

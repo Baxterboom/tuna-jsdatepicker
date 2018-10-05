@@ -2,42 +2,7 @@ $res: "./res" !default;
 $theme: "" !default;
 $top-color: teal !default;
 $sub-color: white !default;
-%head-color {
-    color: $sub-color !important;
-    background: $top-color;
-}
-
-%hover {
-    @extend %head-color;
-    opacity: 0.4;
-}
-
-%active {
-    @extend %head-color;
-}
-
-%today {
-    border: 1px solid $top-color;
-    border-radius: 25px;
-    background: none;
-}
-
-@mixin item($active, $hover) {
-    @if ($active) {
-        &.active {
-            @extend %active;
-        }
-    }
-    @if ($hover) {
-        cursor: pointer;
-        &:hover {
-            @extend %hover;
-        }
-    }
-}
-
-@import "./templates/picker-template.scss";
-.t-jsdatepicker {
+.t-jsdp {
     position: relative;
     display: flex;
     flex-direction: row-reverse;
@@ -63,3 +28,40 @@ $sub-color: white !default;
         padding-right: 25px;
     }
 }
+
+%head-color {
+    color: $sub-color !important;
+    background: $top-color;
+}
+
+%hover {
+    @extend %head-color;
+    opacity: 0.4;
+}
+
+%active {
+    @extend %head-color;
+}
+
+%today {
+    border: 1px solid $top-color;
+    border-radius: 25px;
+    background: none;
+}
+
+@mixin item($active,
+$hover) {
+    @if ($active) {
+        &.active {
+            @extend %active;
+        }
+    }
+    @if ($hover) {
+        cursor: pointer;
+        &:hover {
+            @extend %hover;
+        }
+    }
+}
+
+@import "./templates/picker-template.scss";

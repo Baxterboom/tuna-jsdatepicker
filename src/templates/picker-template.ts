@@ -3,7 +3,7 @@ module JSDatepicker.templates {
         config: {
             name: "picker"
         },
-        template: `<div class="t-jsdatepicker-picker"></div>`,
+        template: `<div class="t-jsdp-picker"></div>`,
         onMounted: (instance: DatePicker, element: JQuery) => {
             instance.picker = element; //need to set this here since templates might need it
 

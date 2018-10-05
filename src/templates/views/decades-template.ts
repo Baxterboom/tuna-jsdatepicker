@@ -24,7 +24,7 @@ module JSDatepicker.templates {
                 while(t.current < t.end) {
                     var item = {
                         value: t.current.year(),
-                        classes: ["t-item", "t-decade"]
+                        classes: ["t-item", "t-event", "t-decade"]
                     };
 
                     t.next = moment(t.current).add(10, "y");

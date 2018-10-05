@@ -35,7 +35,7 @@ gulp.task('ts', function () {
 
 gulp.task("sass", function () {
   return gulp.src("./src/*.scss")
-    .pipe(sass())
+    .pipe(sass({ outputStyle: 'compressed' }))
     .on('error', e => console.error(e))
     .pipe(rename("tuna-jsdatepicker.css"))
     .pipe(gulp.dest("./dist"));
@@ -43,9 +43,9 @@ gulp.task("sass", function () {
 
 gulp.task("minify", function () {
   return gulp.src([
-      './node_modules/tuna-jstemplate/dist/tuna-jstemplate.js',
-      './dist/tuna-jsdatepicker.js'
-    ])
+    './node_modules/tuna-jstemplate/dist/tuna-jstemplate.js',
+    './dist/tuna-jsdatepicker.js'
+  ])
     .pipe(concat('tuna-jsdatepicker.bundled.js'))
     .pipe(gulp.dest('./dist'))
     .pipe(rename('tuna-jsdatepicker.bundled.min.js'))

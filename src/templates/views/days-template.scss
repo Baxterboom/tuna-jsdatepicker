@@ -1,29 +1,20 @@
 .t-days {
     flex-direction: column;
-
     .t-head {
         display: table-row;
     }
-
     .t-body {
         display: table-row;
         border-top: 1px solid $sub-color;
-
         .t-item {
-            &.t-day {
-                @include item(true, true);
-            }
-
             &.t-week {
                 color: gray;
             }
         }
     }
-
     .t-week {
         display: table-row;
     }
-
     .t-item {
         display: table-cell;
         width: 12%;

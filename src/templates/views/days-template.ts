@@ -57,7 +57,7 @@ module JSDatepicker.templates {
                         
                         var item = {
                             value: t.current.date(),
-                            classes: ["t-item", "t-day"]
+                            classes: ["t-item", "t-event", "t-day"]
                         };
 
                         if(t.current.isSame(t.date, "day")) item.classes.push("active");

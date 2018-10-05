@@ -11,7 +11,6 @@ module JSDatepicker {
         date?: string | moment.Moment | Date;
         inputFormat?: string;
         placement?: JQuery;
-        ranges: IRange<moment.Moment>[]
         showToday: boolean;
         showNavigator: boolean;
 
@@ -58,7 +57,6 @@ module JSDatepicker {
         static options: IOptions = {
             view: "days",
             views: ["days", "months", "years", "decades"],
-            ranges: [],
             inputFormat: moment.localeData().longDateFormat("L"),
             showToday: true,
             showNavigator: false
@@ -160,7 +158,7 @@ module JSDatepicker {
             this.remove();
 
             this.picker = templates.mount(templates.picker, this, this.placment);
-            this.picker.find(".t-item").on("click", () => {
+            this.picker.find(".t-event").on("click", () => {
                 if (!this.invokeOnChange()) this.navigate("down");
             });
 

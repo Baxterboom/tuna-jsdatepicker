@@ -17,7 +17,7 @@ module JSDatepicker.templates {
                 moment.monthsShort().forEach(function(m) {
                     var item = {
                         value: m,
-                        classes: ["t-item", "t-month"]
+                        classes: ["t-item", "t-event", "t-month"]
                     };
 
                     if(t.current.isSame(t.date, "M")) item.classes.push("active");

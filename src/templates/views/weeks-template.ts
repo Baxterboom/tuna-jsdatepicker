@@ -57,10 +57,9 @@ module JSDatepicker.templates {
                         
                         var item = {
                             value: t.current.date(),
-                            classes: ["t-item", "t-day"]
+                            classes: ["t-item", "t-event", "t-day"]
                         };
 
-                        if(t.current.isSame(t.date, "day")) item.classes.push("active");
                         if(t.current.isSame(t.today, "day")) item.classes.push("t-today");
                         if(!t.current.isSame(date, "month")) item.classes.push("t-other");
                         w('<div class="<%=item.classes.join(" ")%>" data-date="<%=t.current.format('YYYY-MM-DD')%>"><%=item.value%></div>');

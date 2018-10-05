@@ -4,7 +4,7 @@ module JSDatepicker.templates {
             name: "main"
         },
         template: `
-            <div class="t-jsdatepicker">
+            <div class="t-jsdp">
                 <div class="t-trigger"></div>
             </div>`
     }
