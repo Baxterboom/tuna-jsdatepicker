@@ -6,32 +6,36 @@ module JSDatepicker.templates {
             headerFormat: "YYYY"
         },
         template: `
-            <div class="t-years">
-            <% 
-                var amount = template.config.step.count / 2;
+            <%
+                function renderYears(){
+                    var amount = template.config.step.count / 2;
 
-                var t = {
-                    date: options.date,
-                    end: moment(date).add(amount, "Y"),
-                    start: moment(date).add(-(amount), "Y"),
-                    today: moment(),
-                    current: null
-                };
-
-                t.current = moment(t.start);
-
-                while(t.current < t.end) {
-                    var item = {
-                        value:  t.current.year(), 
-                        classes: ["t-item", "t-event", "t-year"]
+                    var t = {
+                        date: options.date,
+                        end: moment(date).add(amount, "Y"),
+                        start: moment(date).add(-(amount), "Y"),
+                        today: moment(),
+                        current: null
                     };
 
-                    if(t.current.isSame(t.date, "d")) item.classes.push("active");
-                    if(t.current.isSame(t.today, "Y")) item.classes.push("t-today");
+                    t.current = moment(t.start);
 
-                    w('<div class="<%=item.classes.join(" ")%>"><%=item.value%></div>');
-                    t.current.add(1, "y");
+                    while(t.current < t.end) {
+                        var item = {
+                            value:  t.current.year(), 
+                            classes: ["t-item", "t-event", "t-year"]
+                        };
+
+                        if(t.current.isSame(t.date, "d")) item.classes.push("active");
+                        if(t.current.isSame(t.today, "Y")) item.classes.push("t-today");
+                        w('<div class="<%=item.classes.join(" ")%>"><%=item.value%></div>');
+                        t.current.add(1, "y");
+                    }
                 }
+            %>
+            <div class="t-years">
+            <% 
+                renderYears();
             %>
             </div>`,
         onMounted: function (instance: DatePicker, element: JQuery) {
@@ -49,8 +53,7 @@ module JSDatepicker.templates {
 
             picker.find(".t-head .t-nav .t-title").text(`${range.start} - ${range.end}`);
 
-            const items = element.find(".t-item.t-year");
-
+            const items = element.find(".t-event");
             items.on("click", (e) => {
                 const target = $(e.target);
                 const value = parseInt(target.text());

@@ -6,35 +6,39 @@ module JSDatepicker.templates {
             headerFormat: "YYYY"
         },
         template: `
+            <%
+                function renderDecades(){
+                    var amount = template.config.step.count / 2;
+
+                    var t = { 
+                        date: options.date,
+                        end: moment(date).add(amount, "Y"),
+                        start: moment(date).add(-(amount), "Y"),
+                        next: null,
+                        current: null,
+                        today: moment()
+                    };
+    
+                    t.current = moment(t.start);
+    
+                    while(t.current < t.end) {
+                        var item = {
+                            value: t.current.year(),
+                            classes: ["t-item", "t-event", "t-decade"]
+                        };
+    
+                        t.next = moment(t.current).add(10, "y");
+    
+                        if(t.date.isBetween(t.current, t.next, "Y", "[]")) item.classes.push("active");
+                        if(t.today.isBetween(t.current, t.next, "Y", "[]")) item.classes.push("t-today");
+                        w('<div class="<%=item.classes.join(" ")%>"><%=item.value +' - '+ t.next.year()%></div>');
+                        t.current = t.next.add(1, "y");
+                    }
+                }
+            %>
             <div class="t-decades">
             <% 
-                var amount = template.config.step.count / 2;
-
-                var t = { 
-                    date: options.date,
-                    end: moment(date).add(amount, "Y"),
-                    start: moment(date).add(-(amount), "Y"),
-                    next: null,
-                    current: null,
-                    today: moment()
-                };
-
-                t.current = moment(t.start);
-
-                while(t.current < t.end) {
-                    var item = {
-                        value: t.current.year(),
-                        classes: ["t-item", "t-event", "t-decade"]
-                    };
-
-                    t.next = moment(t.current).add(10, "y");
-
-                    if(t.date.isBetween(t.current, t.next, "Y", "[]")) item.classes.push("active");
-                    if(t.today.isBetween(t.current, t.next, "Y", "[]")) item.classes.push("t-today");
-                    
-                    w('<div class="<%=item.classes.join(" ")%>"><%=item.value +' - '+ t.next.year()%></div>');
-                    t.current = t.next.add(1, "y");
-                }
+                renderDecades();
             %>
             </div>`,
         onMounted: function (instance: DatePicker, element: JQuery) {
@@ -52,7 +56,7 @@ module JSDatepicker.templates {
 
             picker.find(".t-nav.t-title").text(`${range.start} - ${range.end}`);
 
-            const items = element.find(".t-item.t-decade");
+            const items = element.find(".t-event");
             items.on("click", (e) => {
                 let value = 0;
 

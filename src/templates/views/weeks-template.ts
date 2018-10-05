@@ -9,28 +9,18 @@ module JSDatepicker.templates {
         },
         template: `
             <%
-                function renderWeekCell(text) {
+                function renderWeek(text) {
                     w(template.config.showWeeknumbers ?'<div class="t-item t-week">'+ text +'</div>' : '');
                 }
 
-                function renderWeekdays() {
-                    renderWeekCell('w');
-
+                function renderHead() {
+                    renderWeek('w');
                     moment.weekdaysMin().forEach(function(f) {
                         w('<div class="t-item t-weekday">'+ f +'</div>');
                     });
                 }
-            %>
-            <div class="t-days t-weeks">
-                <div class="t-head">
-                    <div class="t-week">
-                    <%
-                        renderWeekdays();
-                    %>
-                    </div>
-                </div>
-                <div class="t-body">
-                <% 
+
+                function renderBody() {
                     var t = {
                         date: options.date,
                         end: moment(date).endOf("month").endOf("isoWeek"),
@@ -52,7 +42,7 @@ module JSDatepicker.templates {
                             );
 
                             t.week = t.current.isoWeek();
-                            renderWeekCell(t.week);
+                            renderWeek(t.week);
                         }
                         
                         var item = {
@@ -65,12 +55,24 @@ module JSDatepicker.templates {
                         w('<div class="<%=item.classes.join(" ")%>" data-date="<%=t.current.format('YYYY-MM-DD')%>"><%=item.value%></div>');
                         t.current.add(1, "d");
                     }
+                }
+            %>
+            <div class="t-days t-weeks">
+                <div class="t-head">
+                    <div class="t-week">
+                    <%
+                        renderHead();
+                    %>
+                    </div>
+                </div>
+                <div class="t-body">
+                <% 
+                    renderBody();
                 %>
                 </div>
             </div>`,
         onMounted: function (instance: DatePicker, element: JQuery) {
-            const items = element.find(".t-item.t-day");
-
+            const items = element.find(".t-event");
             items.on("click", (e) => {
                 const target = $(e.target);
                 const value = target.attr("data-date");

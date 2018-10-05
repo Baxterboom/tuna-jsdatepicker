@@ -4,22 +4,30 @@ module JSDatepicker.templates {
             name: "foot"
         },
         template: `
+            <%
+                function renderToday(){
+                    if(options.showToday) w('<button class="t-nav t-today">Today</button>');
+                }
+
+                function renderViews(){
+                    if(options.showNavigator) {
+                        var items = "";
+    
+                        options.views.forEach(function(item) {
+                            const selected = view == item ? "selected" : "";
+                            items += '<option class="t-nav t-view" <%=selected%>><%=item%></option>';
+                        });  
+                        
+                        w('<select class="t-nav t-view">');
+                        w(items);
+                        w('</select>');
+                    }
+                }
+            %>
             <div class="t-foot">
             <%
-                if(options.showToday) w('<button class="t-nav t-today">Today</button>');
-
-                if(options.showNavigator) {
-                    var items = "";
-
-                    options.views.forEach(function(item) {
-                        const selected = view == item ? "selected" : "";
-                        items += '<option class="t-nav t-view" <%=selected%>><%=item%></option>';
-                    });  
-                    
-                    w('<select class="t-nav t-view">');
-                    w(items);
-                    w('</select>');
-                }
+                renderToday();
+                renderViews();
             %>
             </div>`,
         onMounted: function (instance: DatePicker, element: JQuery) {
