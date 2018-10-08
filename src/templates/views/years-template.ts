@@ -21,14 +21,14 @@ module JSDatepicker.templates {
                     t.current = moment(t.start);
 
                     while(t.current < t.end) {
-                        var item = {
-                            value:  t.current.year(), 
-                            classes: ["t-item", "t-event", "t-year"]
-                        };
+                        var item = createItem(t.current)
+                            .checkToday()
+                            .checkActive()
+                            .checkSelectable();
 
-                        if(t.current.isSame(t.date, "d")) item.classes.push("active");
-                        if(t.current.isSame(t.today, "Y")) item.classes.push("t-today");
-                        w('<div class="<%=item.classes.join(" ")%>"><%=item.value%></div>');
+                        item.classes.push("t-year");
+
+                        w('<div class="<%=item.classes.join(" ")%>"><%=item.date.year()%></div>');
                         t.current.add(1, "y");
                     }
                 }

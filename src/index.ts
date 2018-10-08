@@ -45,6 +45,44 @@ module JSDatepicker {
         return cancel;
     }
 
+    export class Item {
+        public classes = ["t-item"];
+        constructor(public date: moment.Moment, public instance: DatePicker) {
+        }
+
+        public checkToday() {
+            if (this.date.isSame(moment(), "day")) this.classes.push("t-today");
+            return this;
+        }
+
+        public checkActive() {
+            if (this.date.isSame(this.instance.date, "day")) this.classes.push("active");
+            return this;
+        }
+
+        public checkOther() {
+            if (!this.date.isSame(this.instance.date, "month")) this.classes.push("t-other");
+            return this;
+        }
+
+        public checkSelectable() {
+            const result = this.isSelectable(this.date) ? "t-event" : "disabled";
+            this.classes.push(result);
+            return this;
+        }
+
+        isSelectable(date: moment.Moment) {
+            const ranges = this.instance.options.ranges || [];
+            for (var i = 0; i < ranges.length; i++) {
+                const r = ranges[i];
+                if (date.isBetween(r.from || moment.min, r.to || moment.max, "day", "[]")) {
+                    return r.selectable;
+                }
+            }
+            return true;
+        }
+    }
+
     export class DatePicker {
         date: moment.Moment;
         view: view;
@@ -184,15 +222,9 @@ module JSDatepicker {
             return true;
         }
 
-        isSelectable(date: moment.Moment) {
-            const ranges = this.options.ranges || [];
-            for (var i = 0; i < ranges.length; i++) {
-                const r = ranges[i];
-                if (date.isBetween(r.from || moment.min, r.to || moment.max, "day", "[]")) {
-                    return r.selectable;
-                }
-            }
-            return true;
+        createItem(date: moment.Moment) {
+            const item = new Item(date, this);
+            return item;
         }
     }
 

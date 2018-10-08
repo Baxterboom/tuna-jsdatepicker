@@ -14,7 +14,8 @@ module JSDatepicker.templates {
         template: `
             <%
                 function renderWeekCell(text) {
-                    w(template.config.showWeeknumbers ?'<div class="t-item t-week">'+ text +'</div>' : '');
+                    if(!template.config.showWeeknumbers) return;
+                    w('<div class="t-item t-week">'+ text +'</div>');
                 }
 
                 function renderHead() {
@@ -45,16 +46,15 @@ module JSDatepicker.templates {
                             renderWeekCell(t.week);
                         }
                         
-                        var item = {
-                            value: t.current.date(),
-                            classes: ["t-item", "t-event", "t-day"]
-                        };
+                        var item = createItem(t.current)
+                            .checkToday()
+                            .checkOther()
+                            .checkActive()
+                            .checkSelectable();
 
-                        if(!isSelectable(t.current)) item.classes.push("disabled");
-                        if(t.current.isSame(t.date, "day")) item.classes.push("active");
-                        if(t.current.isSame(t.today, "day")) item.classes.push("t-today");
-                        if(!t.current.isSame(date, "month")) item.classes.push("t-other");
-                        w('<div class="<%=item.classes.join(" ")%>" data-date="<%=t.current.format('YYYY-MM-DD')%>"><%=item.value%></div>');
+                        item.classes.push("t-day");
+
+                        w('<div class="<%=item.classes.join(" ")%>" data-date="<%=t.current.format('YYYY-MM-DD')%>"><%=item.date.date()%></div>');
                         t.current.add(1, "d");
                     }
                 }
