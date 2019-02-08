@@ -50,13 +50,13 @@ module JSDatepicker {
         constructor(public date: moment.Moment, public instance: DatePicker) {
         }
 
-        public checkToday() {
-            if (this.date.isSame(moment(), "day")) this.classes.push("t-today");
+        public checkToday(unit: moment.unitOfTime.StartOf = "day") {
+            if (this.date.isSame(moment(), unit)) this.classes.push("t-today");
             return this;
         }
 
-        public checkActive() {
-            if (this.date.isSame(this.instance.date, "day")) this.classes.push("active");
+        public checkActive(unit: moment.unitOfTime.StartOf = "day") {
+            if (this.date.isSame(this.instance.date, unit)) this.classes.push("active");
             return this;
         }
 
@@ -65,19 +65,17 @@ module JSDatepicker {
             return this;
         }
 
-        public checkSelectable() {
-            const result = this.isSelectable(this.date) ? "t-event" : "disabled";
+        public checkSelectable(unit: moment.unitOfTime.StartOf = "day") {
+            const result = this.isSelectable(this.date, unit) ? "t-event" : "disabled";
             this.classes.push(result);
             return this;
         }
 
-        isSelectable(date: moment.Moment) {
+        public isSelectable(date: moment.Moment, unit: moment.unitOfTime.StartOf = "day") {
             const ranges = this.instance.options.ranges || [];
             for (var i = 0; i < ranges.length; i++) {
-                const r = ranges[i];
-                if (date.isBetween(r.from || moment.min, r.to || moment.max, "day", "[]")) {
-                    return r.selectable;
-                }
+                const range = { ...{ from: moment.min, to: moment.max }, ...ranges[i] };
+                if (date.isBetween(range.from, range.to, unit, "[]")) return range.selectable;
             }
             return true;
         }
@@ -186,11 +184,13 @@ module JSDatepicker {
 
         place() {
             if (!this.picker) return;
-            const offset = this.input.offset();
-            const dimensions = (this.input.outerHeight() || 0) + 4;
+            const offset = this.trigger.offset();
 
             if (offset && !this.picker.closest(this.element).length) {
-                this.picker.css({ top: offset.top + dimensions, left: offset.left });
+                const teak = { top: -12, left: -22 };
+                const width = this.picker.width() || 0;
+                const heigth = (this.input.outerHeight() || 0) + teak.top;
+                this.picker.css({ top: offset.top + heigth, left: offset.left - width - teak.left });
             }
 
             this.cancelOutsideClickEventHandler = registerOutsideClickEventHandler(this.picker, () => this.close());

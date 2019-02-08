@@ -9,21 +9,23 @@ module JSDatepicker.templates {
             <%
                 function renderMonths(){
                     var t = {
+                        unit: "M",
                         date: options.date,
                         today: moment(),
                         current: moment(date).startOf("year")
                     };
                     
                     moment.monthsShort().forEach(function(m) {
-                        var item = {
-                            value: m,
-                            classes: ["t-item", "t-event", "t-month"]
-                        };
-    
-                        if(t.current.isSame(t.date, "M")) item.classes.push("active");
-                        if(t.current.isSame(t.today, "M")) item.classes.push("t-today");
+                        var item = createItem(t.current)
+                        .checkToday(t.unit)
+                        .checkActive(t.unit)
+                        .checkSelectable(t.unit);
+
+                        item.classes.push("t-month");
+                        item.value = m;
+
                         w('<div class="<%=item.classes.join(" ")%>"><%=item.value%></div>');
-                        t.current.add(1, "M");
+                        t.current.add(1, t.unit);
                     });
                 }
             %>

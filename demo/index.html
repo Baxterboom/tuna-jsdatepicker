@@ -21,23 +21,37 @@
                 date: moment().add(2, "days"),
                 views: ["months", "years", "decades"],
                 view: "days",
-                placement: "#placement"
             });
 
             JSDatepicker.create("#ranges", {
                 date: moment().add(1, "day"),
                 view: "days",
                 ranges: [
-                    // {
-                    //     from: moment().add(-3, "days"),
-                    //     to: moment().add(3, "days"),
-                    //     selectable: true
-                    // },
                     {
-                        to: moment().add(-3, "day")
+                         from: moment().add(1, "week"),
+                         to: moment().add(1, "week").add(2, "day"),
+                         selectable: true
+                    },
+                    {
+                         from: moment().add(1, "month"),
+                         to: moment().add(1, "month").add(1, "day"),
+                         selectable: true
+                    },
+                    {
+                         from: moment().add(3, "year"),
+                         to: moment().add(3, "year").add(1, "day"),
+                         selectable: true
+                    },
+                    {
+                         from: moment().add(30, "year"),
+                         to: moment().add(30, "year").add(1, "day"),
+                         selectable: true
                     },
                     {
                         from: moment().add(3, "day")
+                    },
+                    {
+                        to: moment().add(-3, "day")
                     }
                 ],
                 placement: "#placement"
@@ -53,7 +67,7 @@
 
             JSDatepicker.create("#months", {
                 date: moment().add(2, "days"),
-                views: ["weeks", "years", "decades"],
+                views: ["years", "decades"],
                 view: "months",
                 inputFormat: "MMMM YYYY",
                 placement: "#placement"
@@ -89,7 +103,7 @@
     <h1><a href="https://github.com/Baxterboom/tuna-jsdatepicker" target="blank">Tuna JSDatepicker</a></h1> >> <a href="templates.html">view
         templates</a>
     <div id="demo">
-        <input type="text" id="days" placeholder="days">
+        <input type="text" id="days" placeholder="days (no placement)">
         <input type="text" id="ranges" placeholder="ranges">
         <input type="text" id="weeks" placeholder="weeks">
         <input type="text" id="months" placeholder="months">

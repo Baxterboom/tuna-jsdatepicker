@@ -8,37 +8,47 @@
     box-shadow: 2px 2px 9px silver;
     font-size: 12px;
     background: $sub-color;
+    top: 60px;
+
     .t-other {
         color: lavender;
     }
+
     .t-item {
         padding: 10px;
         margin: 10px;
         text-align: center;
         border-radius: 3px;
     }
+
     .t-event {
         @include item(true, true);
     }
+
     .t-today {
         @extend %today;
     }
+
     .disabled {
         color: silver;
         cursor: not-allowed;
         border-radius: 0;
         background: whitesmoke;
     }
+
     .active {
         @extend %active;
     }
+
     &::before {
         content: none;
     }
+
     .t-head,
     .t-body {
         display: table-row;
     }
+
     .t-days,
     .t-hours,
     .t-minutes,
@@ -50,11 +60,13 @@
         flex-wrap: wrap;
         justify-content: center;
     }
+
     input,
     button,
     select {
         font-family: inherit;
     }
+
     @import "./head-template.scss";
     @import "./foot-template.scss";
     @import "./views/days-template.scss";

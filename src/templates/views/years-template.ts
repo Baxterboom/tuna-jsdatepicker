@@ -11,6 +11,7 @@ module JSDatepicker.templates {
                     var amount = template.config.step.count / 2;
 
                     var t = {
+                        unit: "y",
                         date: options.date,
                         end: moment(date).add(amount, "Y"),
                         start: moment(date).add(-(amount), "Y"),
@@ -22,14 +23,15 @@ module JSDatepicker.templates {
 
                     while(t.current < t.end) {
                         var item = createItem(t.current)
-                            .checkToday()
-                            .checkActive()
-                            .checkSelectable();
+                            .checkToday(t.unit)
+                            .checkActive(t.unit)
+                            .checkSelectable(t.unit);
 
                         item.classes.push("t-year");
+                        item.value = item.date.year();
 
-                        w('<div class="<%=item.classes.join(" ")%>"><%=item.date.year()%></div>');
-                        t.current.add(1, "y");
+                        w('<div class="<%=item.classes.join(" ")%>"><%=item.value%></div>');
+                        t.current.add(1, t.unit);
                     }
                 }
             %>

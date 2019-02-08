@@ -23,6 +23,7 @@ module JSDatepicker.templates {
 
                 function renderBody() {
                     var t = {
+                        unit: "d",
                         date: options.date,
                         end: moment(date).endOf("month").endOf("isoWeek"),
                         start: moment(date).startOf("month").startOf("isoWeek"),
@@ -53,9 +54,10 @@ module JSDatepicker.templates {
                             .checkSelectable();
 
                         item.classes.push("t-day");
+                        item.value = item.date.date();
 
-                        w('<div class="<%=item.classes.join(" ")%>" data-date="<%=t.current.format('YYYY-MM-DD')%>"><%=item.date.date()%></div>');
-                        t.current.add(1, "d");
+                        w('<div class="<%=item.classes.join(" ")%>" data-date="<%=t.current.format('YYYY-MM-DD')%>"><%=item.value%></div>');
+                        t.current.add(1, t.unit);
                     }
                 }
             %>
