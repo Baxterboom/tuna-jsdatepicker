@@ -11,6 +11,7 @@ module JSDatepicker.templates {
                     var amount = template.config.step.count / 2;
 
                     var t = { 
+                        unit: "y",
                         date: options.date,
                         end: moment(date).add(amount, "Y"),
                         start: moment(date).add(-(amount), "Y"),
@@ -20,19 +21,33 @@ module JSDatepicker.templates {
                     };
     
                     t.current = moment(t.start);
-    
+
                     while(t.current < t.end) {
-                        var item = {
-                            value: t.current.year(),
-                            classes: ["t-item", "t-event", "t-decade"]
-                        };
-    
+                        var item = createItem(t.current);
+                        item.value = t.current.year();
+                        item.classes.push("t-decade");
+                    
                         t.next = moment(t.current).add(10, "y");
-    
-                        if(t.date.isBetween(t.current, t.next, "Y", "[]")) item.classes.push("active");
-                        if(t.today.isBetween(t.current, t.next, "Y", "[]")) item.classes.push("t-today");
+                        
+                        while(item.date <= t.next){
+                            item.checkToday(t.unit)
+                                .checkActive(t.unit)
+                                .checkSelectable(t.unit);
+                            item.date.add(1, t.unit);
+                        }
+
+                        item.classes =  resloveClasses(item.classes);
+
                         w('<div class="<%=item.classes.join(" ")%>"><%=item.value +' - '+ t.next.year()%></div>');
-                        t.current = t.next.add(1, "y");
+                        t.current = t.next.add(1, t.unit);
+                    }
+
+                    function resloveClasses(array){
+                        var hasEvent = array.indexOf("t-event") > -1;
+                        return array.reduce(function (prev, curr) {
+                            if(hasEvent && curr == "disabled") return prev;
+                            return prev.indexOf(curr) < 0 ? prev.concat([curr]) : prev;
+                        }, []);
                     }
                 }
             %>

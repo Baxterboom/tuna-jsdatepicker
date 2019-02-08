@@ -45,6 +45,42 @@ module JSDatepicker {
         return cancel;
     }
 
+    export class Item {
+        public classes = ["t-item"];
+        constructor(public date: moment.Moment, public instance: DatePicker) {
+        }
+
+        public checkToday(unit: moment.unitOfTime.StartOf = "day") {
+            if (this.date.isSame(moment(), unit)) this.classes.push("t-today");
+            return this;
+        }
+
+        public checkActive(unit: moment.unitOfTime.StartOf = "day") {
+            if (this.date.isSame(this.instance.date, unit)) this.classes.push("active");
+            return this;
+        }
+
+        public checkOther() {
+            if (!this.date.isSame(this.instance.date, "month")) this.classes.push("t-other");
+            return this;
+        }
+
+        public checkSelectable(unit: moment.unitOfTime.StartOf = "day") {
+            const result = this.isSelectable(this.date, unit) ? "t-event" : "disabled";
+            this.classes.push(result);
+            return this;
+        }
+
+        public isSelectable(date: moment.Moment, unit: moment.unitOfTime.StartOf = "day") {
+            const ranges = this.instance.options.ranges || [];
+            for (var i = 0; i < ranges.length; i++) {
+                const range = { ...{ from: moment.min, to: moment.max }, ...ranges[i] };
+                if (date.isBetween(range.from, range.to, unit, "[]")) return range.selectable;
+            }
+            return true;
+        }
+    }
+
     export class DatePicker {
         date: moment.Moment;
         view: view;
@@ -148,11 +184,13 @@ module JSDatepicker {
 
         place() {
             if (!this.picker) return;
-            const offset = this.input.offset();
-            const dimensions = (this.input.outerHeight() || 0) + 4;
+            const offset = this.trigger.offset();
 
             if (offset && !this.picker.closest(this.element).length) {
-                this.picker.css({ top: offset.top + dimensions, left: offset.left });
+                const teak = { top: -12, left: -22 };
+                const width = this.picker.width() || 0;
+                const heigth = (this.input.outerHeight() || 0) + teak.top;
+                this.picker.css({ top: offset.top + heigth, left: offset.left - width - teak.left });
             }
 
             this.cancelOutsideClickEventHandler = registerOutsideClickEventHandler(this.picker, () => this.close());
@@ -184,15 +222,9 @@ module JSDatepicker {
             return true;
         }
 
-        isSelectable(date: moment.Moment) {
-            const ranges = this.options.ranges || [];
-            for (var i = 0; i < ranges.length; i++) {
-                const r = ranges[i];
-                if (date.isBetween(r.from || moment.min, r.to || moment.max, "day", "[]")) {
-                    return r.selectable;
-                }
-            }
-            return true;
+        createItem(date: moment.Moment) {
+            const item = new Item(date, this);
+            return item;
         }
     }
 

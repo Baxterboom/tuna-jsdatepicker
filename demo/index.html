@@ -16,28 +16,43 @@
     <script>
 
         function onload() {
+            renderViews();
 
             JSDatepicker.create("#days", {
                 date: moment().add(2, "days"),
                 views: ["months", "years", "decades"],
                 view: "days",
-                placement: "#placement"
             });
 
             JSDatepicker.create("#ranges", {
                 date: moment().add(1, "day"),
                 view: "days",
                 ranges: [
-                    // {
-                    //     from: moment().add(-3, "days"),
-                    //     to: moment().add(3, "days"),
-                    //     selectable: true
-                    // },
                     {
-                        to: moment().add(-2, "day")
+                         from: moment().add(1, "week"),
+                         to: moment().add(1, "week").add(2, "day"),
+                         selectable: true
                     },
                     {
-                        from: moment().add(2, "day")
+                         from: moment().add(1, "month"),
+                         to: moment().add(1, "month").add(1, "day"),
+                         selectable: true
+                    },
+                    {
+                         from: moment().add(3, "year"),
+                         to: moment().add(3, "year").add(1, "day"),
+                         selectable: true
+                    },
+                    {
+                         from: moment().add(30, "year"),
+                         to: moment().add(30, "year").add(1, "day"),
+                         selectable: true
+                    },
+                    {
+                        from: moment().add(3, "day")
+                    },
+                    {
+                        to: moment().add(-3, "day")
                     }
                 ],
                 placement: "#placement"
@@ -53,7 +68,7 @@
 
             JSDatepicker.create("#months", {
                 date: moment().add(2, "days"),
-                views: ["weeks", "years", "decades"],
+                views: ["years", "decades"],
                 view: "months",
                 inputFormat: "MMMM YYYY",
                 placement: "#placement"
@@ -78,25 +93,79 @@
     </script>
     <style>
 
+        #container{
+            display: flex;
+            flex-direction: row;
+        }
+
         #demo {
             margin: 20px 0;
+            flex-grow: 2;
+        }
+
+        #templates {
+            margin: 30px;
+        }
+
+        #templates .t-jsdp-picker {
+            display: none;
+        }
+
+        #templates.t-jsdp-picker {
+            position: relative;
+            top:0;
+        }
+
+        #templates>div {
+            margin: 20px;
+            padding: 20px;
+            border: 1px dashed silver;
         }
 
     </style>
+    <script>
+
+        function renderViews() {
+            const parent = $("#templates");
+            const datepicker = new JSDatepicker.create($("#templates1"), {
+                date: moment().add(1, "month"),
+                showToday: true,
+                showNavigator: true
+            });
+
+            parent.html();
+
+            const templates = JSDatepicker.templates;
+
+            for (var item in templates) {
+                // console.log(item);
+                if (!templates[item].template) continue;
+                // parent.append("<center>" + item + " template</center>")
+                templates.mount(templates[item], datepicker, parent).attr("title", item);
+            }
+
+            parent.find(".t-item").on("click", function () {
+                datepicker.date.add(1, "M");
+                datepicker.render();
+            });
+        }
+    </script>
 </head>
 
 <body onload="onload()">
-    <h1><a href="https://github.com/Baxterboom/tuna-jsdatepicker" target="blank">Tuna JSDatepicker</a></h1> >> <a href="templates.html">view
-        templates</a>
-    <div id="demo">
-        <input type="text" id="days" placeholder="days">
-        <input type="text" id="ranges" placeholder="ranges">
-        <input type="text" id="weeks" placeholder="weeks">
-        <input type="text" id="months" placeholder="months">
-        <input type="text" id="years" placeholder="years">
-        <input type="text" id="decades" placeholder="decades">
+    <h1><a href="https://github.com/Baxterboom/tuna-jsdatepicker" target="blank">Tuna JSDatepicker</a></h1> >> <a href="templates.html">view templates</a>
+    <div id="container">
+        <div id="demo">
+            <input type="text" id="days" placeholder="days (no placement)">
+            <input type="text" id="ranges" placeholder="ranges">
+            <input type="text" id="weeks" placeholder="weeks">
+            <input type="text" id="months" placeholder="months">
+            <input type="text" id="years" placeholder="years">
+            <input type="text" id="decades" placeholder="decades">
+        </div>
+        <div id="placement"></div>
+        <div id="templates" class="t-jsdp-picker"></div>
     </div>
-    <div id="placement"></div>
 </body>
 
 </html>
