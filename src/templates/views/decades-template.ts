@@ -5,57 +5,51 @@ module JSDatepicker.templates {
             step: { unit: "y", count: 100 },
             headerFormat: "YYYY"
         },
-        template: `
-            <%
-                function renderDecades(){
-                    var amount = template.config.step.count / 2;
+        onRender: function (instance: DatePicker) {
+            const config = this.config;
 
-                    var t = { 
-                        unit: "y",
-                        date: options.date,
-                        end: moment(date).add(amount, "Y"),
-                        start: moment(date).add(-(amount), "Y"),
-                        next: null,
-                        current: null,
-                        today: moment()
-                    };
-    
-                    t.current = moment(t.start);
+            function renderDecades() {
+                const amount = config.step!.count / 2;
+                const unit = "y";
+                const date = instance.date;
+                const end = moment(date).add(amount, unit);
+                const start = moment(date).add(-(amount), unit);
+                let next = null;
+                let current = moment(start);
+                const result: string[] = [];
 
-                    while(t.current < t.end) {
-                        var item = createItem(t.current);
-                        item.value = t.current.year();
-                        item.classes.push("t-decade");
-                    
-                        t.next = moment(t.current).add(10, "y");
-                        
-                        while(item.date <= t.next){
-                            item.checkToday(t.unit)
-                                .checkActive(t.unit)
-                                .checkSelectable(t.unit);
-                            item.date.add(1, t.unit);
-                        }
+                while (current < end) {
+                    var item = instance.createItem(current);
+                    item.classes.push("t-decade");
 
-                        item.classes =  resloveClasses(item.classes);
+                    next = moment(current).add(10, unit);
 
-                        w('<div class="<%=item.classes.join(" ")%>"><%=item.value +' - '+ t.next.year()%></div>');
-                        t.current = t.next.add(1, t.unit);
+                    while (item.date <= next) {
+                        item.checkToday(unit)
+                            .checkActive(unit)
+                            .checkSelectable(unit);
+                        item.date.add(1, unit);
                     }
 
-                    function resloveClasses(array){
-                        var hasEvent = array.indexOf("t-event") > -1;
-                        return array.reduce(function (prev, curr) {
-                            if(hasEvent && curr == "disabled") return prev;
-                            return prev.indexOf(curr) < 0 ? prev.concat([curr]) : prev;
-                        }, []);
-                    }
+                    item.classes = resolveClasses(item.classes);
+
+                    result.push(`<div class="${item.classes.join(" ")}">${current.year()} - ${next.year()}</div>`);
+                    current = next.add(1, unit);
                 }
-            %>
-            <div class="t-decades">
-            <% 
-                renderDecades();
-            %>
-            </div>`,
+
+                function resolveClasses(array: any[]) {
+                    var hasEvent = array.indexOf("t-event") > -1;
+                    return array.reduce(function (prev, curr) {
+                        if (hasEvent && curr == "disabled") return prev;
+                        return prev.indexOf(curr) < 0 ? prev.concat([curr]) : prev;
+                    }, []);
+                }
+
+                return result.join("");
+            }
+
+            return `<div class="t-decades" >${renderDecades()}</div>`;
+        },
         onMounted: function (instance: DatePicker, element: JQuery) {
             const step = this.config.step;
             const picker = instance.picker;

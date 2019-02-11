@@ -5,35 +5,26 @@ module JSDatepicker.templates {
             step: { unit: "y", count: 1 },
             headerFormat: "YYYY"
         },
-        template: `
-            <%
-                function renderMonths(){
-                    var t = {
-                        unit: "M",
-                        date: options.date,
-                        today: moment(),
-                        current: moment(date).startOf("year")
-                    };
-                    
-                    moment.monthsShort().forEach(function(m) {
-                        var item = createItem(t.current)
-                        .checkToday(t.unit)
-                        .checkActive(t.unit)
-                        .checkSelectable(t.unit);
+        onRender: function (instance: DatePicker) {
+            const unit = "M";
+            const date = instance.date;
+            const current = moment(date).startOf("year");
+            const result: string[] = [];
 
-                        item.classes.push("t-month");
-                        item.value = m;
+            moment.monthsShort().forEach(function (m) {
+                var item = instance.createItem(current)
+                    .checkToday(unit)
+                    .checkActive(unit)
+                    .checkSelectable(unit);
 
-                        w('<div class="<%=item.classes.join(" ")%>"><%=item.value%></div>');
-                        t.current.add(1, t.unit);
-                    });
-                }
-            %>
-            <div class="t-months">
-            <% 
-                renderMonths();
-            %>
-            </div>`,
+                item.classes.push("t-month");
+
+                result.push(`<div class="${item.classes.join(" ")}">${m}</div>`);
+                current.add(1, unit);
+            });
+
+            return `<div class="t-months">${result.join("")}</div>`;
+        },
         onMounted: function (instance: DatePicker, element: JQuery) {
             const items = element.find(".t-event");
             items.on("click", (e) => {

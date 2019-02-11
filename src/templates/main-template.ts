@@ -3,9 +3,8 @@ module JSDatepicker.templates {
         config: {
             name: "main"
         },
-        template: `
-            <div class="t-jsdp">
-                <div class="t-trigger"></div>
-            </div>`
+        onRender: function (instance: DatePicker) {
+            return `<div class="t-jsdp"><div class="t-trigger"></div></div>`;
+        }
     }
 }

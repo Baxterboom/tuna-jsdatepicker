@@ -11,70 +11,63 @@ module JSDatepicker.templates {
             headerFormat: "MMMM YYYY",
             showWeeknumbers: true
         },
-        template: `
-            <%
-                function renderWeekCell(text) {
-                    if(!template.config.showWeeknumbers) return;
-                    w('<div class="t-item t-week">'+ text +'</div>');
-                }
+        onRender: function (instance: DatePicker) {
+            const config = this.config;
 
-                function renderHead() {
-                    renderWeekCell('w');
-                    moment.weekdaysMin().forEach(function(f) {
-                        w('<div class="t-item t-weekday">'+ f +'</div>');
-                    });
-                }
+            function renderWeekCell(text: string | number) {
+                return config.showWeeknumbers ? `<div class="t-item t-week">${text}</div>` : ``
+            }
 
-                function renderBody(){
-                    var t = {
-                        unit: "d",
-                        date: options.date,
-                        end: moment(date).endOf("month").endOf("isoWeek"),
-                        start: moment(date).startOf("month").startOf("isoWeek"),
-                        week: null,
-                        today: moment(),
-                        current: null
-                    };
+            function renderHead() {
+                const result = [renderWeekCell('w')];
+                moment.weekdaysMin().forEach(f => {
+                    result.push(`<div class="t-item t-weekday">${f}</div>`);
+                });
+                return result.join("");
+            }
 
-                    t.current = moment(t.start);
+            function renderBody() {
+                const unit = "d";
+                const date = instance.date;
+                const end = moment(date).endOf("month").endOf("isoWeek");
+                const start = moment(date).startOf("month").startOf("isoWeek");
 
-                    while(t.current < t.end) {
-                        if(t.week != t.current.isoWeek()) {
-                            if(t.week) w('</div>');
-                            w('<div class="t-week">');
-                            
-                            t.week = t.current.isoWeek();
-                            renderWeekCell(t.week);
-                        }
-                        
-                        var item = createItem(t.current)
-                            .checkOther(t.unit)    
-                            .checkToday(t.unit)
-                            .checkActive(t.unit)
-                            .checkSelectable(t.unit);
+                let week = 0;
+                let current = moment(start);
 
-                        item.classes.push("t-day");
-                        item.value = item.date.date();
+                const result: string[] = [];
 
-                        w('<div class="<%=item.classes.join(" ")%>" data-date="<%=t.current.format('YYYY-MM-DD')%>"><%=item.value%></div>');
-                        t.current.add(1, t.unit);
+                while (current < end) {
+                    if (week != current.isoWeek()) {
+                        if (week) result.push('</div>');
+                        result.push('<div class="t-week">');
+
+                        week = current.isoWeek();
+                        result.push(renderWeekCell(week));
                     }
+
+                    var item = instance.createItem(current)
+                        .checkOther()
+                        .checkToday(unit)
+                        .checkActive(unit)
+                        .checkSelectable(unit);
+
+                    item.classes.push("t-day");
+
+                    result.push(`<div class="${item.classes.join(" ")}" data-date="${current.format('YYYY-MM-DD')}">${item.date.date()}</div>`);
+                    current.add(1, unit);
                 }
-            %>
-            <div class="t-days">
-                <div class="t-head">
-                    <div class="t-week">
-                    <%
-                        renderHead();
-                    %>
-                    </div>
-                </div>
-                <div class="t-body">
-                <% 
-                    renderBody();
-                %>
-                </div>
-            </div>`,
+
+                return result.join("");
+            }
+
+            return `<div class="t-days">
+                        <div class="t-head">
+                            <div class="t-week">${renderHead()}</div>
+                        </div>
+                        <div class="t-body">${renderBody()}</div>
+                    </div>`;
+        },
         onMounted: function (instance: DatePicker, element: JQuery) {
             const items = element.find(".t-event");
             items.on("click", (e) => {

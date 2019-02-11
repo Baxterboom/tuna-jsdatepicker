@@ -28,7 +28,7 @@ module JSDatepicker {
 
     export interface ITemplate<T=IConfig> {
         config: T;
-        template: string;
+        onRender: (instance: DatePicker) => string;
         onMounted?: (instance: DatePicker, element: JQuery) => void;
     }
 
@@ -103,7 +103,7 @@ module JSDatepicker {
         });
 
         constructor(target: JQuery, options: IOptions) {
-            this.options = $.extend({}, DatePicker.options, options);
+            this.options = { ...DatePicker.options, ...options };
             this.date = moment(this.options.date);
             this.view = this.options.view as view || "days";
 
@@ -131,7 +131,9 @@ module JSDatepicker {
                     case 9:
                     case 13:
                         const format = this.options.inputFormat;
-                        this.date = moment(this.input.val(), format);
+                        const date = moment(this.input.val(), format);
+                        if (!date.isValid()) return;
+                        this.date = date;
                         return this.invokeOnChange();
                 }
             });
@@ -187,10 +189,10 @@ module JSDatepicker {
             const offset = this.trigger.offset();
 
             if (offset && !this.picker.closest(this.element).length) {
-                const teak = { top: -12, left: -22 };
+                const tweak = { top: -12, left: -22 };
                 const width = this.picker.width() || 0;
-                const heigth = (this.input.outerHeight() || 0) + teak.top;
-                this.picker.css({ top: offset.top + heigth, left: offset.left - width - teak.left });
+                const heigth = (this.input.outerHeight() || 0) + tweak.top;
+                this.picker.css({ top: offset.top + heigth, left: offset.left - width - tweak.left });
             }
 
             this.cancelOutsideClickEventHandler = registerOutsideClickEventHandler(this.picker, () => this.close());
@@ -234,10 +236,8 @@ module JSDatepicker {
 }
 
 module JSDatepicker.templates {
-
     export function parse(template: ITemplate, instance: DatePicker) {
-        const data = $.extend({}, instance, { template });
-        return $(JSTemplate.parse(template.template, data, true));
+        return $(template.onRender(instance));
     }
 
     export function mount(template: ITemplate, instance: DatePicker, parent: JQuery) {

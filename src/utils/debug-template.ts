@@ -1,8 +1,10 @@
 var fnRender = JSDatepicker.DatePicker.prototype.render;
+
 JSDatepicker.DatePicker.prototype.render = function () {
     console.time("render")
     $(".t-debug").remove();
-    JSDatepicker.templates.mount(JSDatepicker.templates.debug, this, this.placment);
+    this.placment.append(JSDatepicker.templates.debug.onRender(this));
+    console.log(JSDatepicker.templates.debug.onRender(this));
     console.log(new Error().stack);
     const result = fnRender.call(this);
     console.timeEnd("render")
@@ -14,10 +16,9 @@ module JSDatepicker.templates {
         config: {
             name: "debug"
         },
-        template: `
-          <div class="t-debug">
-            <textarea style="width:100%;height:400px";></textarea>
-          </div>`,
+        onRender: function (_instance: DatePicker) {
+            return `<div class="t-debug"><textarea style="width:100%;height:400px";></textarea></div>`;
+        },
         onMounted: function (instance: DatePicker, element: JQuery) {
             $(".t-debug textarea").val(
                 JSDatepicker.templates.json(instance, undefined, 4) +

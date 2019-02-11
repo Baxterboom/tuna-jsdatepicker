@@ -29,7 +29,6 @@
     "typescript": "3.0.3"
   },
   "dependencies": {
-    "moment": "^2.22.2",
-    "tuna-jstemplate": "https://github.com/Baxterboom/tuna-jstemplate.git"
+    "moment": "^2.22.2"
   }
 }
