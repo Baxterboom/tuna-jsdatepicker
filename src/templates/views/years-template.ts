@@ -5,41 +5,31 @@ module JSDatepicker.templates {
             step: { unit: "y", count: 12 },
             headerFormat: "YYYY"
         },
-        template: `
-            <%
-                function renderYears(){
-                    var amount = template.config.step.count / 2;
+        onRender: function (instance: DatePicker) {
+            const amount = this.config.step!.count / 2 || 0;
+            const options = instance.options;
 
-                    var t = {
-                        unit: "y",
-                        date: options.date,
-                        end: moment(date).add(amount, "Y"),
-                        start: moment(date).add(-(amount), "Y"),
-                        today: moment(),
-                        current: null
-                    };
+            const unit = "y";
+            const date = instance.date;
+            const end = moment(date).add(amount, unit)
+            const start = moment(date).add(-(amount), unit);
+            const current = moment(start)
+            const result = [""]
 
-                    t.current = moment(t.start);
+            while (current < end) {
+                var item = instance.createItem(current)
+                    .checkToday(unit)
+                    .checkActive(unit)
+                    .checkSelectable(unit);
 
-                    while(t.current < t.end) {
-                        var item = createItem(t.current)
-                            .checkToday(t.unit)
-                            .checkActive(t.unit)
-                            .checkSelectable(t.unit);
+                item.classes.push("t-year");
 
-                        item.classes.push("t-year");
-                        item.value = item.date.year();
+                result.push(`<div class="${item.classes.join(" ")}">${item.date.year()}</div>`);
+                current.add(1, unit);
+            }
 
-                        w('<div class="<%=item.classes.join(" ")%>"><%=item.value%></div>');
-                        t.current.add(1, t.unit);
-                    }
-                }
-            %>
-            <div class="t-years">
-            <% 
-                renderYears();
-            %>
-            </div>`,
+            return `<div class="t-years">${result.join("")}</div>`;
+        },
         onMounted: function (instance: DatePicker, element: JQuery) {
             const step = this.config.step;
             const picker = instance.picker;

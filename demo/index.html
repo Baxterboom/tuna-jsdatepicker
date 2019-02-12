@@ -135,11 +135,11 @@
 
             parent.html();
 
-            const templates = JSDatepicker.templates;
+            var templates = JSDatepicker.templates;
 
             for (var item in templates) {
                 // console.log(item);
-                if (!templates[item].template) continue;
+                if (!templates[item].onRender) continue;
                 // parent.append("<center>" + item + " template</center>")
                 templates.mount(templates[item], datepicker, parent).attr("title", item);
             }
