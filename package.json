@@ -17,18 +17,18 @@
   },
   "homepage": "https://github.com/Baxterboom/tuna-jsdatepicker#readme",
   "devDependencies": {
-    "@types/jquery": "3.3.9",
-    "browser-sync": "2.24.7",
-    "gulp": "3.9.1",
-    "gulp-concat": "^2.6.1",
-    "gulp-rename": "1.4.0",
-    "gulp-sass": "4.0.1",
-    "gulp-typescript": "5.0.0-alpha.3",
-    "gulp-uglify": "^3.0.1",
-    "jquery": "3.3.1",
-    "typescript": "3.0.3"
+    "@types/jquery": "3.3.29",
+    "browser-sync": "2.26.3",
+    "gulp": "~3.9.1",
+    "gulp-concat": "~2.6.1",
+    "gulp-rename": "~1.4.0",
+    "gulp-sass": "~4.0.2",
+    "gulp-typescript": "~5.0.0",
+    "gulp-uglify": "~3.0.1",
+    "jquery": "~3.3.1",
+    "typescript": "~3.3.3"
   },
   "dependencies": {
-    "moment": "^2.22.2"
+    "moment": "~2.24.0"
   }
 }
